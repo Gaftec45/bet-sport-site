@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Withdrawals - Bet Lord Admin</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .topbar {
+            background: #111827;
+            color: white;
+            padding: 18px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: 700;
+        }
+
+        .back {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.05);
+
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 16px 13px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .amount {
+            font-weight: 700;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .user-email {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.processing {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status.approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status.completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status.rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .status.cancelled {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .reference {
+            font-family: monospace;
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .date {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 50px 20px;
+            color: #64748b;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="topbar">
+
+        <div class="brand">
+            Bet Lord Admin
+        </div>
+
+        <a
+            href="/admin/dashboard"
+            class="back"
+        >
+            ← Dashboard
+        </a>
+
+    </div>
+
+
+    <div class="container">
+
+        <div class="header">
+
+            <h1>
+                Withdrawal Requests
+            </h1>
+
+            <p>
+                Review and manage user withdrawal requests.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <% if (
+                withdrawals &&
+                withdrawals.length > 0
+            ) { %>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                User
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Bank
+                            </th>
+
+                            <th>
+                                Account
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Reference
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <% withdrawals.forEach(
+                            withdrawal => {
+                        %>
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="user-name">
+
+                                        <%= withdrawal.user
+                                            ? withdrawal.user.name
+                                            : "Unknown User"
+                                        %>
+
+                                    </div>
+
+                                    <div class="user-email">
+
+                                        <%= withdrawal.user
+                                            ? withdrawal.user.email
+                                            : ""
+                                        %>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="amount">
+
+                                        ₦<%=
+                                            withdrawal.amount
+                                                .toLocaleString()
+                                        %>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <%= withdrawal.bankName %>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div>
+                                        <%= withdrawal.accountName %>
+                                    </div>
+
+                                    <div class="user-email">
+
+                                        <%= withdrawal.accountNumber %>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span
+                                        class="status <%= withdrawal.status %>"
+                                    >
+
+                                        <%= withdrawal.status %>
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="reference">
+
+                                        <%= withdrawal.reference %>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+    <div class="date">
+
+        <%= new Date(
+            withdrawal.createdAt
+        ).toLocaleString() %>
+
+    </div>
+
+</td>
+<td>
+
+    <% if (withdrawal.status === "pending") { %>
+
+        <form
+            method="POST"
+            action="/admin/withdrawals/<%= withdrawal._id %>/approve"
+            style="margin-bottom:8px;"
+        >
+
+            <button type="submit"
+            style="
+                    background:#16a34a;
+                    color:white;
+                    border:none;
+                    padding:8px 12px;
+                    border-radius:7px;
+                    cursor:pointer;
+                    font-weight:600;
+                ">
+                Approve
+            </button>
+
+        </form>
+
+
+        <form
+            method="POST"
+            action="/admin/withdrawals/<%= withdrawal._id %>/reject"
+            style="margin-bottom:8px;"
+        >
+
+            <input
+                type="text"
+                name="adminNote"
+                placeholder="Reason"
+                style="
+                    width:150px;
+                    padding:7px;
+                    border:1px solid #d1d5db;
+                    border-radius:6px;
+                    margin-bottom:5px;
+                "
+            >
+
+            <button type="submit"
+            style="
+                    background:#dc2626;
+                    color:white;
+                    border:none;
+                    padding:8px 12px;
+                    border-radius:7px;
+                    cursor:pointer;
+                    font-weight:600;
+                ">
+                Reject
+            </button>
+
+        </form>
+
+
+    <% } else if (withdrawal.status === "approved") { %>
+
+        <form
+            method="POST"
+            action="/admin/withdrawals/<%= withdrawal._id %>/pay"
+        >
+
+            <button type="submit"
+            style="
+                    background:#16a34a;
+                    color:white;
+                    border:none;
+                    padding:8px 12px;
+                    border-radius:7px;
+                    cursor:pointer;
+                    font-weight:600;
+                ">
+                Pay
+            </button>
+
+        </form>
+
+
+    <% } else if (withdrawal.status === "processing") { %>
+
+        <span>
+            Waiting for Paystack...
+        </span>
+
+
+    <% } else { %>
+
+        <span style="color:#64748b;font-size:12px;">
+            Already processed
+        </span>
+
+    <% } %>
+
+</td>
+
+                            </tr>
+
+                        <% }) %>
+
+                    </tbody>
+
+                </table>
+
+            <% } else { %>
+
+                <div class="empty">
+
+                    No withdrawal requests yet.
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

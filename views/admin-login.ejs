@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title><%= title %> - BetSports</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f4f6;
+            font-family: Arial, sans-serif;
+        }
+
+        .admin-login {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .admin-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 35px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, .08);
+        }
+
+        .admin-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-logo h1 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        .admin-logo span {
+            display: block;
+            margin-top: 8px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .admin-title {
+            margin-bottom: 25px;
+        }
+
+        .admin-title h2 {
+            margin: 0 0 6px;
+            font-size: 22px;
+        }
+
+        .admin-title p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #111827;
+        }
+
+        .admin-btn {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            background: #111827;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .admin-btn:hover {
+            background: #1f2937;
+        }
+
+        .back-home {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="admin-login">
+
+    <div class="admin-card">
+
+        <div class="admin-logo">
+            <h1>BetSports</h1>
+            <span>Administration Panel</span>
+        </div>
+
+        <div class="admin-title">
+            <h2>Admin Login</h2>
+            <p>Sign in to manage your sportsbook.</p>
+        </div>
+
+        <form action="/admin/login" method="POST">
+
+            <div class="form-group">
+                <label for="email">Email</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Admin email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Admin password"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="admin-btn"
+            >
+                Sign In
+            </button>
+
+        </form>
+
+        <a href="/" class="back-home">
+            ← Back to BetSports
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,518 @@
+<%- include("partials/head") %>
+<%- include("partials/navbar") %>
+
+
+<style>
+
+    /* ================================
+       BET DETAILS
+    ================================= */
+
+    .bet-details-page {
+        background: #f4f6f8;
+        min-height: calc(100vh - 70px);
+        padding: 35px 0 70px;
+    }
+
+
+    /* HEADER */
+
+    .details-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 25px;
+    }
+
+    .details-header h1 {
+        margin: 8px 0;
+        font-size: 32px;
+        letter-spacing: -.7px;
+    }
+
+    .details-header p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .back-bets {
+        padding: 10px 16px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background: white;
+        color: #374151;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .back-bets:hover {
+        border-color: #22c55e;
+        color: #16a34a;
+    }
+
+
+    /* MAIN CARD */
+
+    .details-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+
+    /* BET TOP */
+
+    .details-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 22px;
+        border-bottom: 1px solid #edf0f2;
+        background: #fafafa;
+    }
+
+    .details-id {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .details-id strong {
+        color: #111827;
+    }
+
+    .details-date {
+        margin-top: 5px;
+        color: #9ca3af;
+        font-size: 12px;
+    }
+
+
+    /* STATUS */
+
+    .details-status {
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .details-status.pending {
+        background: #fff7ed;
+        color: #ea580c;
+    }
+
+    .details-status.won {
+        background: #ecfdf3;
+        color: #16a34a;
+    }
+
+    .details-status.lost {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .details-status.cancelled {
+        background: #f3f4f6;
+        color: #6b7280;
+    }
+
+
+    /* SELECTIONS */
+
+    .details-section-title {
+        padding: 20px 22px 5px;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .details-selections {
+        padding: 0 22px;
+    }
+
+    .details-selection {
+        padding: 20px 0;
+        border-bottom: 1px solid #edf0f2;
+    }
+
+    .details-selection:last-child {
+        border-bottom: none;
+    }
+
+    .details-selection-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .details-teams {
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .details-odd {
+        padding: 6px 10px;
+        background: #ecfdf3;
+        color: #15803d;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .details-market {
+        margin-top: 7px;
+        color: #6b7280;
+        font-size: 12px;
+    }
+
+
+    /* SUMMARY */
+
+    .details-summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-top: 1px solid #edf0f2;
+        background: #fafafa;
+    }
+
+    .summary-item {
+        padding: 20px 22px;
+        border-right: 1px solid #edf0f2;
+    }
+
+    .summary-item:last-child {
+        border-right: none;
+    }
+
+    .summary-label {
+        color: #9ca3af;
+        font-size: 11px;
+        margin-bottom: 6px;
+    }
+
+    .summary-value {
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .summary-value.green {
+        color: #16a34a;
+    }
+
+
+    /* FOOTER */
+
+    .details-footer {
+        padding: 20px 22px;
+        border-top: 1px solid #edf0f2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .footer-note {
+        color: #9ca3af;
+        font-size: 12px;
+    }
+
+    .betting-button {
+        padding: 11px 18px;
+        border-radius: 8px;
+        background: #22c55e;
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .betting-button:hover {
+        background: #16a34a;
+    }
+
+
+    /* MOBILE */
+
+    @media (max-width: 650px) {
+
+        .bet-details-page {
+            padding-top: 25px;
+        }
+
+        .details-header {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .details-header h1 {
+            font-size: 27px;
+        }
+
+        .details-top {
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .details-summary {
+            grid-template-columns: 1fr;
+        }
+
+        .summary-item {
+            border-right: none;
+            border-bottom: 1px solid #edf0f2;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .details-footer {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .betting-button {
+            width: 100%;
+            text-align: center;
+        }
+
+    }
+
+</style>
+
+
+<section class="bet-details-page">
+
+    <div class="container">
+
+
+        <!-- HEADER -->
+
+        <div class="details-header">
+
+            <div>
+
+                <span class="section-label">
+                    BETTING HISTORY
+                </span>
+
+                <h1>Bet Details</h1>
+
+                <p>
+                    Review your bet and selections.
+                </p>
+
+            </div>
+
+
+            <a
+                href="/my-bets"
+                class="back-bets"
+            >
+                ← My Bets
+            </a>
+
+        </div>
+
+
+        <!-- BET CARD -->
+
+        <div class="details-card">
+
+
+            <!-- TOP -->
+
+            <div class="details-top">
+
+                <div>
+
+                    <div class="details-id">
+
+                        Bet ID:
+
+                        <strong>
+                            <%= bet._id.toString().slice(-8).toUpperCase() %>
+                        </strong>
+
+                    </div>
+
+
+                    <div class="details-date">
+
+                        <%= new Date(
+                            bet.createdAt
+                        ).toLocaleString() %>
+
+                    </div>
+
+                </div>
+
+
+                <span
+                    class="details-status <%= bet.status %>"
+                >
+
+                    <%= bet.status.toUpperCase() %>
+
+                </span>
+
+            </div>
+
+
+            <!-- SELECTION TITLE -->
+
+            <div class="details-section-title">
+
+                Selections
+
+            </div>
+
+
+            <!-- SELECTIONS -->
+
+            <div class="details-selections">
+
+
+                <% bet.selections.forEach((selection, index) => { %>
+
+
+                    <div class="details-selection">
+
+
+                        <div class="details-selection-top">
+
+                            <div class="details-teams">
+
+                                <%= selection.homeTeam %>
+
+                                <span style="color:#9ca3af;">
+                                    vs
+                                </span>
+
+                                <%= selection.awayTeam %>
+
+                            </div>
+
+
+                            <div class="details-odd">
+
+                                <%= Number(
+                                    selection.odds
+                                ).toFixed(2) %>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="details-market">
+
+                            Match Winner:
+
+                            <strong>
+                                <%= selection.selection %>
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+
+                <% }) %>
+
+
+            </div>
+
+
+            <!-- SUMMARY -->
+
+            <div class="details-summary">
+
+
+                <div class="summary-item">
+
+                    <div class="summary-label">
+                        TOTAL ODDS
+                    </div>
+
+                    <div class="summary-value">
+
+                        <%= Number(
+                            bet.totalOdds
+                        ).toFixed(2) %>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <div class="summary-label">
+                        STAKE
+                    </div>
+
+                    <div class="summary-value">
+
+                        ₦<%= Number(
+                            bet.stake
+                        ).toLocaleString() %>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <div class="summary-label">
+                        POTENTIAL WIN
+                    </div>
+
+                    <div class="summary-value green">
+
+                        ₦<%= Number(
+                            bet.potentialWin
+                        ).toLocaleString() %>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="details-footer">
+
+                <div class="footer-note">
+
+                    Bet placed successfully.
+
+                </div>
+
+
+                <a
+                    href="/"
+                    class="betting-button"
+                >
+                    Place Another Bet
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<%- include("partials/footer") %>

@@ -1,0 +1,284 @@
+<style>
+    /* ============================= */
+/* SPORTS */
+/* ============================= */
+
+.sports-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.sport-card {
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    background: white;
+    border-radius: 12px;
+    padding: 24px 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.sport-card:hover {
+    transform: translateY(-3px);
+    border-color: #22c55e;
+}
+
+.sport-card-active {
+    border-color: #22c55e;
+    box-shadow: 0 4px 18px rgba(34, 197, 94, 0.12);
+}
+
+.sport-icon {
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.sport-card h3 {
+    margin: 0;
+    font-size: 17px;
+}
+
+.sport-card p {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+
+/* ============================= */
+/* FOOTBALL LEAGUES */
+/* ============================= */
+
+.football-leagues {
+    margin-top: 28px;
+    padding: 22px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+.league-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.league-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.league-header span {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.league-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.league-tab {
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+    padding: 10px 15px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.league-tab:hover {
+    border-color: #22c55e;
+}
+
+.league-tab.active {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: white;
+}
+
+
+/* ============================= */
+/* MOBILE */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+    .sports-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .sport-card {
+        padding: 18px 12px;
+    }
+
+    .league-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .league-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 5px;
+    }
+
+    .league-tab {
+        white-space: nowrap;
+    }
+
+}
+</style>
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div>
+                <span class="section-label">
+                    SPORTS
+                </span>
+
+                <h2>Choose your sport</h2>
+            </div>
+
+            <a href="#">
+                View all →
+            </a>
+
+        </div>
+
+
+        <!-- SPORTS -->
+
+        <div class="sports-grid">
+
+            <button class="sport-card sport-card-active" data-sport="football">
+
+                <div class="sport-icon">⚽</div>
+
+                <h3>Football</h3>
+
+                <p>Football events</p>
+
+            </button>
+
+
+            <button class="sport-card" data-sport="basketball">
+
+                <div class="sport-icon">🏀</div>
+
+                <h3>Basketball</h3>
+
+                <p>Coming soon</p>
+
+            </button>
+
+
+            <button class="sport-card" data-sport="tennis">
+
+                <div class="sport-icon">🎾</div>
+
+                <h3>Tennis</h3>
+
+                <p>Coming soon</p>
+
+            </button>
+
+
+            <button class="sport-card" data-sport="racing">
+
+                <div class="sport-icon">🏎️</div>
+
+                <h3>Racing</h3>
+
+                <p>Coming soon</p>
+
+            </button>
+
+        </div>
+
+
+        <!-- FOOTBALL LEAGUES -->
+
+        <div class="football-leagues">
+
+            <div class="league-header">
+
+                <h3>Football leagues</h3>
+
+                <span>
+                    Select a league
+                </span>
+
+            </div>
+
+
+            <div class="league-tabs">
+
+                <button
+                    class="league-tab active"
+                    data-league="epl"
+                >
+                    Premier League
+                </button>
+
+
+                <button
+                    class="league-tab"
+                    data-league="laliga"
+                >
+                    La Liga
+                </button>
+
+
+                <button
+                    class="league-tab"
+                    data-league="bundesliga"
+                >
+                    Bundesliga
+                </button>
+
+
+                <button
+                    class="league-tab"
+                    data-league="seriea"
+                >
+                    Serie A
+                </button>
+
+
+                <button
+                    class="league-tab"
+                    data-league="ligue1"
+                >
+                    Ligue 1
+                </button>
+
+
+                <button
+                    class="league-tab"
+                    data-league="champions"
+                >
+                    Champions League
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

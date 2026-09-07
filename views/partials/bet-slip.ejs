@@ -1,0 +1,350 @@
+<style>
+    /* ============================= */
+/* BET SLIP */
+/* ============================= */
+
+.bet-slip {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 360px;
+    max-width: calc(100vw - 30px);
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.bet-slip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.bet-slip-header h3 {
+    margin: 4px 0 0;
+    font-size: 20px;
+}
+
+.clear-bets {
+    border: none;
+    background: transparent;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.bet-slip-tabs {
+    display: flex;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.bet-tab {
+    flex: 1;
+    padding: 13px;
+    border: none;
+    background: #ffffff;
+    color: #6b7280;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.bet-tab.active {
+    color: #16a34a;
+    border-bottom: 2px solid #22c55e;
+}
+
+.bet-slip-content {
+    max-height: 330px;
+    overflow-y: auto;
+}
+
+.empty-bet-slip {
+    text-align: center;
+    padding: 45px 25px;
+}
+
+.empty-bet-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
+.empty-bet-slip h4 {
+    margin: 0 0 7px;
+    font-size: 16px;
+}
+
+.empty-bet-slip p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.bet-selections {
+    padding: 12px;
+}
+
+.bet-selection {
+    position: relative;
+    padding: 14px;
+    margin-bottom: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    background: #f8fafc;
+}
+
+.bet-selection:last-child {
+    margin-bottom: 0;
+}
+
+.bet-selection-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.bet-selection-teams {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.remove-selection {
+    border: none;
+    background: transparent;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.remove-selection:hover {
+    color: #ef4444;
+}
+
+.bet-selection-market {
+    margin-top: 7px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.bet-selection-odd {
+    margin-top: 8px;
+    display: inline-block;
+    padding: 5px 8px;
+    border-radius: 5px;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.bet-slip-footer {
+    padding: 16px 18px;
+    border-top: 1px solid #e5e7eb;
+    background: #f8fafc;
+}
+
+.stake-row,
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.stake-input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    background: white;
+    padding: 0 10px;
+}
+
+.stake-input-wrapper span {
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.stake-input-wrapper input {
+    width: 100px;
+    padding: 9px 5px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.potential-row {
+    font-size: 15px;
+}
+
+.potential-row strong {
+    color: #16a34a;
+    font-size: 17px;
+}
+
+.place-bet-btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #22c55e;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.place-bet-btn:hover {
+    background: #16a34a;
+}
+
+.place-bet-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .bet-slip {
+        right: 10px;
+        bottom: 10px;
+        width: calc(100vw - 20px);
+    }
+
+}
+</style>
+
+<aside class="bet-slip" id="bet-slip">
+
+    <div class="bet-slip-header">
+
+        <div>
+            <span class="section-label">BETTING</span>
+            <h3>Bet Slip</h3>
+        </div>
+
+        <button
+            type="button"
+            class="clear-bets"
+            id="clear-bets"
+        >
+            Clear
+        </button>
+
+    </div>
+
+
+    <div class="bet-slip-tabs">
+
+        <button
+            type="button"
+            class="bet-tab active"
+            data-tab="bets"
+        >
+            Bets
+        </button>
+
+        <button
+            type="button"
+            class="bet-tab"
+            data-tab="open"
+        >
+            Open Bets
+        </button>
+
+    </div>
+
+
+    <div class="bet-slip-content" id="bet-slip-content">
+
+        <div class="empty-bet-slip" id="empty-bet-slip">
+
+            <div class="empty-bet-icon">
+                🎟️
+            </div>
+
+            <h4>Your bet slip is empty</h4>
+
+            <p>
+                Click on any odds to add a selection.
+            </p>
+
+        </div>
+
+        <div
+            class="bet-selections"
+            id="bet-selections"
+        ></div>
+
+    </div>
+
+
+    <div
+        class="bet-slip-footer"
+        id="bet-slip-footer"
+    >
+
+        <div class="stake-row">
+
+            <span>Stake</span>
+
+            <div class="stake-input-wrapper">
+
+                <span>₦</span>
+
+                <input
+                    type="number"
+                    id="stake-input"
+                    placeholder="0"
+                    min="0"
+                    step="100"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-row">
+
+            <span>Total Odds</span>
+
+            <strong id="total-odds">
+                0.00
+            </strong>
+
+        </div>
+
+
+        <div class="summary-row potential-row">
+
+            <span>Potential Win</span>
+
+            <strong id="potential-win">
+                ₦0.00
+            </strong>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="place-bet-btn"
+            id="place-bet-btn"
+        >
+            Place Bet
+        </button>
+
+    </div>
+
+</aside>

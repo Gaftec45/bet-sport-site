@@ -1,0 +1,639 @@
+<%- include("partials/head") %>
+<%- include("partials/navbar") %>
+
+
+<style>
+
+    /* ================================
+       MY BETS PAGE
+    ================================= */
+
+    .my-bets-page {
+        background: #f4f6f8;
+        min-height: calc(100vh - 70px);
+        padding: 35px 0 70px;
+    }
+
+
+    /* HEADER */
+
+    .my-bets-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 28px;
+    }
+
+    .my-bets-header h1 {
+        margin: 8px 0;
+        font-size: 32px;
+        letter-spacing: -0.7px;
+    }
+
+    .my-bets-header p {
+        margin: 0;
+        color: #6b7280;
+    }
+
+    .back-dashboard {
+        padding: 10px 16px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background: white;
+        color: #374151;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .back-dashboard:hover {
+        border-color: #22c55e;
+        color: #16a34a;
+    }
+
+
+    /* SUMMARY */
+
+    .bets-summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .summary-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 20px;
+    }
+
+    .summary-label {
+        color: #9ca3af;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .summary-value {
+        margin-top: 7px;
+        font-size: 25px;
+        font-weight: 800;
+    }
+
+
+    /* BET CARD */
+
+    .bet-history-list {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .history-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+
+    /* BET HEADER */
+
+    .history-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 22px;
+        background: #fafafa;
+        border-bottom: 1px solid #edf0f2;
+    }
+
+    .history-id {
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .history-id strong {
+        color: #111827;
+    }
+
+    .history-date {
+        margin-top: 5px;
+        font-size: 11px;
+        color: #9ca3af;
+    }
+
+
+    /* STATUS */
+
+    .history-status {
+        display: inline-block;
+        padding: 6px 11px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    .history-status.pending {
+        background: #fff7ed;
+        color: #ea580c;
+    }
+
+    .history-status.won {
+        background: #ecfdf3;
+        color: #16a34a;
+    }
+
+    .history-status.lost {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .history-status.cancelled {
+        background: #f3f4f6;
+        color: #6b7280;
+    }
+
+
+    /* SELECTIONS */
+
+    .history-selections {
+        padding: 5px 22px;
+    }
+
+    .selection-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        padding: 17px 0;
+        border-bottom: 1px solid #edf0f2;
+    }
+
+    .selection-row:last-child {
+        border-bottom: none;
+    }
+
+    .selection-teams {
+        font-size: 14px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .selection-market {
+        margin-top: 5px;
+        color: #9ca3af;
+        font-size: 12px;
+    }
+
+    .selection-odd {
+        padding: 6px 9px;
+        border-radius: 6px;
+        background: #ecfdf3;
+        color: #15803d;
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+
+
+    /* FOOTER */
+
+    .history-footer {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-top: 1px solid #edf0f2;
+        background: #fafafa;
+    }
+
+    .history-stat {
+        padding: 17px 22px;
+        border-right: 1px solid #edf0f2;
+    }
+
+    .history-stat:last-child {
+        border-right: none;
+    }
+
+    .history-stat-label {
+        color: #9ca3af;
+        font-size: 11px;
+        margin-bottom: 5px;
+    }
+
+    .history-stat-value {
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .potential-win {
+        color: #16a34a;
+    }
+
+
+    /* EMPTY */
+
+    .empty-bets {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        padding: 70px 25px;
+        text-align: center;
+    }
+
+    .empty-bets-icon {
+        font-size: 45px;
+        margin-bottom: 15px;
+    }
+
+    .empty-bets h3 {
+        margin: 0 0 8px;
+        font-size: 19px;
+    }
+
+    .empty-bets p {
+        margin: 0 0 22px;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .start-betting-btn {
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 8px;
+        background: #22c55e;
+        color: white;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .start-betting-btn:hover {
+        background: #16a34a;
+    }
+
+
+    /* MOBILE */
+
+    @media (max-width: 700px) {
+
+        .my-bets-page {
+            padding-top: 25px;
+        }
+
+        .my-bets-header {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .my-bets-header h1 {
+            font-size: 27px;
+        }
+
+        .bets-summary {
+            grid-template-columns: 1fr;
+        }
+
+        .history-header {
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .selection-row {
+            align-items: flex-start;
+        }
+
+        .history-footer {
+            grid-template-columns: 1fr;
+        }
+
+        .history-stat {
+            border-right: none;
+            border-bottom: 1px solid #edf0f2;
+        }
+
+        .history-stat:last-child {
+            border-bottom: none;
+        }
+
+    }
+
+
+    .history-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: .2s;
+}
+
+.history-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,.06);
+    border-color: #d1d5db;
+}
+
+</style>
+
+
+<section class="my-bets-page">
+
+    <div class="container">
+
+
+        <!-- HEADER -->
+
+        <div class="my-bets-header">
+
+            <div>
+
+                <span class="section-label">
+                    BETTING HISTORY
+                </span>
+
+                <h1>My Bets</h1>
+
+                <p>
+                    View and track all your bets.
+                </p>
+
+            </div>
+
+
+            <a
+                href="/dashboard"
+                class="back-dashboard"
+            >
+                ← Dashboard
+            </a>
+
+        </div>
+
+
+        <% if (bets.length === 0) { %>
+
+
+            <!-- EMPTY STATE -->
+
+            <div class="empty-bets">
+
+                <div class="empty-bets-icon">
+                    🎟️
+                </div>
+
+                <h3>
+                    No bets yet
+                </h3>
+
+                <p>
+                    Your betting history will appear here once you place your first bet.
+                </p>
+
+                <a
+                    href="/"
+                    class="start-betting-btn"
+                >
+                    Start Betting
+                </a>
+
+            </div>
+
+
+        <% } else { %>
+
+
+            <!-- SUMMARY -->
+
+            <div class="bets-summary">
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        TOTAL BETS
+                    </div>
+
+                    <div class="summary-value">
+                        <%= bets.length %>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        PENDING
+                    </div>
+
+                    <div class="summary-value">
+
+                        <%= bets.filter(
+                            bet => bet.status === "pending"
+                        ).length %>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        WON
+                    </div>
+
+                    <div class="summary-value">
+
+                        <%= bets.filter(
+                            bet => bet.status === "won"
+                        ).length %>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BET LIST -->
+
+            <div class="bet-history-list">
+
+
+                <% bets.forEach(bet => { %>
+
+
+                    <a
+                        href="/my-bets/<%= bet._id %>"
+                        class="history-card"
+                    >
+
+
+                        <!-- BET HEADER -->
+
+                        <div class="history-header">
+
+                            <div>
+
+                                <div class="history-id">
+
+                                    Bet ID:
+                                    <strong>
+                                        <%= bet._id.toString().slice(-8).toUpperCase() %>
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="history-date">
+
+                                    <%= new Date(
+                                        bet.createdAt
+                                    ).toLocaleString() %>
+
+                                </div>
+
+                            </div>
+
+
+                            <span
+                                class="history-status <%= bet.status %>"
+                            >
+
+                                <%= bet.status.toUpperCase() %>
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- SELECTIONS -->
+
+                        <div class="history-selections">
+
+
+                            <% bet.selections.forEach(selection => { %>
+
+
+                                <div class="selection-row">
+
+                                    <div>
+
+                                        <div class="selection-teams">
+
+                                            <%= selection.homeTeam %>
+                                            vs
+                                            <%= selection.awayTeam %>
+
+                                        </div>
+
+
+                                        <div class="selection-market">
+
+                                            Match Winner:
+                                            <strong>
+                                                <%= selection.selection %>
+                                            </strong>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="selection-odd">
+
+                                        <%= Number(
+                                            selection.odds
+                                        ).toFixed(2) %>
+
+                                    </div>
+
+                                </div>
+
+
+                            <% }) %>
+
+
+                        </div>
+
+
+                        <!-- BET FOOTER -->
+
+                        <div class="history-footer">
+
+
+                            <div class="history-stat">
+
+                                <div class="history-stat-label">
+                                    TOTAL ODDS
+                                </div>
+
+                                <div class="history-stat-value">
+
+                                    <%= Number(
+                                        bet.totalOdds
+                                    ).toFixed(2) %>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="history-stat">
+
+                                <div class="history-stat-label">
+                                    STAKE
+                                </div>
+
+                                <div class="history-stat-value">
+
+                                    ₦<%= Number(
+                                        bet.stake
+                                    ).toLocaleString() %>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="history-stat">
+
+                                <div class="history-stat-label">
+                                    POTENTIAL WIN
+                                </div>
+
+                                <div class="history-stat-value potential-win">
+
+                                    ₦<%= Number(
+                                        bet.potentialWin
+                                    ).toLocaleString() %>
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </a>
+
+
+                <% }) %>
+
+
+            </div>
+
+
+        <% } %>
+
+
+    </div>
+
+</section>
+
+
+<%- include("partials/footer") %>

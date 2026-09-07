@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Withdraw - Bet Lord</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .topbar {
+            background: #111827;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .balance-card {
+            background: #111827;
+            color: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .balance-label {
+            color: #cbd5e1;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .balance {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #111827;
+        }
+
+        .withdraw-btn {
+            width: 100%;
+            border: none;
+            background: #111827;
+            color: white;
+            padding: 14px;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .withdraw-btn:hover {
+            background: #1f2937;
+        }
+
+        .notice {
+            background: #f1f5f9;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 13px;
+            color: #475569;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        .withdrawal {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 15px 0;
+        }
+
+        .withdrawal:last-child {
+            border-bottom: none;
+        }
+
+        .withdrawal-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 7px;
+        }
+
+        .amount {
+            font-weight: 700;
+        }
+
+        .status {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: capitalize;
+        }
+
+        .pending {
+            color: #d97706;
+        }
+
+        .processing {
+            color: #2563eb;
+        }
+
+        .approved {
+            color: #16a34a;
+        }
+
+        .completed {
+            color: #16a34a;
+        }
+
+        .rejected,
+        .cancelled {
+            color: #dc2626;
+        }
+
+        .details {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .empty {
+            color: #64748b;
+            font-size: 14px;
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        @media (max-width: 700px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                padding: 16px 20px;
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="brand">
+            Bet Lord
+        </div>
+
+        <a href="/dashboard" class="back-link">
+            ← Dashboard
+        </a>
+    </div>
+
+    <div class="container">
+
+        <div class="balance-card">
+
+            <div class="balance-label">
+                Available Balance
+            </div>
+
+            <div class="balance">
+                ₦<%= currentUser
+                    ? currentUser.balance.toLocaleString()
+                    : "0"
+                %>
+            </div>
+
+        </div>
+
+
+        <div class="grid">
+
+            <!-- WITHDRAW FORM -->
+
+            <div class="card">
+
+                <h2>
+                    Withdraw Funds
+                </h2>
+
+                <form
+                    method="POST"
+                    action="/withdraw"
+                >
+
+                    <div class="form-group">
+
+                        <label for="amount">
+                            Amount
+                        </label>
+
+                        <input
+                            type="number"
+                            id="amount"
+                            name="amount"
+                            min="100"
+                            step="1"
+                            placeholder="Enter amount"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="bankName">
+                            Bank Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="bankName"
+                            name="bankName"
+                            placeholder="e.g. GTBank"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="accountNumber">
+                            Account Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="accountNumber"
+                            name="accountNumber"
+                            inputmode="numeric"
+                            maxlength="10"
+                            placeholder="10-digit account number"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="accountName">
+                            Account Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="accountName"
+                            name="accountName"
+                            placeholder="Account holder name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="withdraw-btn"
+                    >
+                        Request Withdrawal
+                    </button>
+
+                </form>
+
+
+                <div class="notice">
+                    Minimum withdrawal is ₦100.
+                    Withdrawal requests are reviewed before
+                    payment is processed.
+                </div>
+
+            </div>
+
+
+            <!-- WITHDRAWAL HISTORY -->
+
+            <div class="card">
+
+                <h2>
+                    Withdrawal History
+                </h2>
+
+                <% if (
+                    typeof withdrawals !== "undefined" &&
+                    withdrawals.length > 0
+                ) { %>
+
+                    <% withdrawals.forEach(withdrawal => { %>
+
+                        <div class="withdrawal">
+
+                            <div class="withdrawal-top">
+
+                                <div class="amount">
+                                    ₦<%= withdrawal.amount.toLocaleString() %>
+                                </div>
+
+                                <div class="status <%= withdrawal.status %>">
+                                    <%= withdrawal.status %>
+                                </div>
+
+                            </div>
+
+                            <div class="details">
+
+                                <div>
+                                    <strong>Bank:</strong>
+                                    <%= withdrawal.bankName %>
+                                </div>
+
+                                <div>
+                                    <strong>Account:</strong>
+                                    <%= withdrawal.accountNumber %>
+                                </div>
+
+                                <div>
+                                    <strong>Reference:</strong>
+                                    <%= withdrawal.reference %>
+                                </div>
+
+                                <div>
+                                    <%= new Date(
+                                        withdrawal.createdAt
+                                    ).toLocaleString() %>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    <% }) %>
+
+                <% } else { %>
+
+                    <div class="empty">
+                        No withdrawal history yet.
+                    </div>
+
+                <% } %>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
+
+
+
+<td>
+
+    <% if (withdrawal.status === "pending") { %>
+
+        <form
+            method="POST"
+            action="/admin/withdrawals/<%= withdrawal._id %>/approve"
+            style="margin-bottom:8px;"
+        >
+
+            <button
+                type="submit"
+                style="
+                    background:#16a34a;
+                    color:white;
+                    border:none;
+                    padding:8px 12px;
+                    border-radius:7px;
+                    cursor:pointer;
+                    font-weight:600;
+                "
+            >
+                Approve
+            </button>
+
+        </form>
+
+
+        <form
+            method="POST"
+            action="/admin/withdrawals/<%= withdrawal._id %>/reject"
+        >
+
+            <input
+                type="text"
+                name="adminNote"
+                placeholder="Reason"
+                style="
+                    width:150px;
+                    padding:7px;
+                    border:1px solid #d1d5db;
+                    border-radius:6px;
+                    margin-bottom:5px;
+                "
+            >
+
+            <button
+                type="submit"
+                style="
+                    background:#dc2626;
+                    color:white;
+                    border:none;
+                    padding:8px 12px;
+                    border-radius:7px;
+                    cursor:pointer;
+                    font-weight:600;
+                "
+            >
+                Reject
+            </button>
+
+        </form>
+
+    <% } else { %>
+
+        <span style="color:#64748b;font-size:12px;">
+            Already processed
+        </span>
+
+    <% } %>
+
+</td>

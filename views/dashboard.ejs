@@ -1,0 +1,814 @@
+<%- include("partials/head") %>
+<%- include("partials/navbar") %>
+
+<style>
+    /* ================================
+       PROFESSIONAL DASHBOARD
+    ================================= */
+
+    .dashboard-page {
+        background: #f4f6f8;
+        min-height: calc(100vh - 70px);
+        padding: 35px 0 70px;
+    }
+
+    /* TOP */
+
+    .dashboard-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 30px;
+    }
+
+    .dashboard-welcome .section-label {
+        color: #22c55e;
+    }
+
+    .dashboard-welcome h1 {
+        font-size: 32px;
+        margin: 8px 0;
+        letter-spacing: -0.7px;
+    }
+
+    .dashboard-welcome p {
+        color: #6b7280;
+    }
+
+    .dashboard-date {
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    /* WALLET */
+
+    .wallet-card {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+        color: white;
+        border-radius: 18px;
+        padding: 30px;
+        min-height: 190px;
+        box-shadow: 0 15px 35px rgba(17, 24, 39, .15);
+        margin-bottom: 25px;
+    }
+
+    .wallet-card::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border: 1px solid rgba(255,255,255,.07);
+        border-radius: 50%;
+        right: -70px;
+        top: -80px;
+    }
+
+    .wallet-card::before {
+        content: "";
+        position: absolute;
+        width: 160px;
+        height: 160px;
+        border: 1px solid rgba(255,255,255,.05);
+        border-radius: 50%;
+        right: 10px;
+        bottom: -100px;
+    }
+
+    .wallet-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .wallet-label {
+        color: #9ca3af;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1.8px;
+    }
+
+    .wallet-balance {
+        font-size: 42px;
+        font-weight: 800;
+        margin: 10px 0 25px;
+        letter-spacing: -1px;
+    }
+
+    .wallet-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .wallet-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #9ca3af;
+        font-size: 13px;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #22c55e;
+        border-radius: 50%;
+    }
+
+    .wallet-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .wallet-btn {
+        padding: 10px 17px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,.12);
+        background: rgba(255,255,255,.07);
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .wallet-btn.primary {
+        background: #22c55e;
+        border-color: #22c55e;
+    }
+
+    /* QUICK ACTIONS */
+
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .quick-action {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        transition: .2s;
+    }
+
+    .quick-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,.06);
+    }
+
+    .quick-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: #ecfdf3;
+        color: #16a34a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .quick-action strong {
+        display: block;
+        font-size: 14px;
+    }
+
+    .quick-action span {
+        display: block;
+        margin-top: 3px;
+        color: #9ca3af;
+        font-size: 12px;
+    }
+
+    /* STATISTICS */
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+
+    .dashboard-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .card-header {
+        padding: 20px 22px;
+        border-bottom: 1px solid #edf0f2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-header h3 {
+        font-size: 17px;
+    }
+
+    .card-header a {
+        color: #16a34a;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .stat {
+        padding: 24px 22px;
+        border-right: 1px solid #edf0f2;
+    }
+
+    .stat:last-child {
+        border-right: none;
+    }
+
+    .stat-label {
+        color: #9ca3af;
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    .stat-change {
+        margin-top: 6px;
+        color: #16a34a;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* BETS */
+
+    .bet-row {
+        padding: 18px 22px;
+        border-bottom: 1px solid #edf0f2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .bet-row:last-child {
+        border-bottom: none;
+    }
+
+    .bet-teams {
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .bet-meta {
+        color: #9ca3af;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .bet-result {
+        text-align: right;
+    }
+
+    .bet-amount {
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    .bet-status {
+        display: inline-block;
+        margin-top: 5px;
+        padding: 4px 8px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .bet-status.pending {
+        background: #fff7ed;
+        color: #ea580c;
+    }
+
+    .bet-status.won {
+        background: #ecfdf3;
+        color: #16a34a;
+    }
+
+    /* PROFILE */
+
+    .profile-card {
+        padding: 22px;
+    }
+
+    .profile-top {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #edf0f2;
+    }
+
+    .profile-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: #111827;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .profile-name {
+        font-weight: 700;
+    }
+
+    .profile-email {
+        color: #9ca3af;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .profile-links {
+        margin-top: 8px;
+    }
+
+    .profile-link {
+        display: flex;
+        justify-content: space-between;
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f2f4;
+        font-size: 14px;
+    }
+
+    .profile-link:last-child {
+        border-bottom: none;
+    }
+
+    .profile-link span:last-child {
+        color: #9ca3af;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 900px) {
+
+        .quick-actions {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 600px) {
+
+        .dashboard-page {
+            padding-top: 25px;
+        }
+
+        .dashboard-top {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dashboard-welcome h1 {
+            font-size: 27px;
+        }
+
+        .wallet-card {
+            padding: 23px;
+        }
+
+        .wallet-balance {
+            font-size: 32px;
+        }
+
+        .wallet-bottom {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .wallet-actions {
+            width: 100%;
+        }
+
+        .wallet-btn {
+            flex: 1;
+        }
+
+        .quick-actions {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .stats {
+            grid-template-columns: 1fr;
+        }
+
+        .stat {
+            border-right: none;
+            border-bottom: 1px solid #edf0f2;
+        }
+
+        .stat:last-child {
+            border-bottom: none;
+        }
+    }
+</style>
+
+<section class="dashboard-page">
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="dashboard-top">
+
+        <div class="dashboard-welcome">
+            <span class="section-label">MY ACCOUNT</span>
+
+            <h1>Welcome back, <%= user.name.split(" ")[0] %> 👋</h1>
+
+            <p>Manage your bets, wallet and account.</p>
+        </div>
+
+        <div class="dashboard-date">
+            Sportsbook Account
+        </div>
+
+    </div>
+
+
+    <!-- WALLET -->
+
+    <div class="wallet-card">
+
+        <div class="wallet-content">
+
+            <div class="wallet-label">
+                AVAILABLE BALANCE
+            </div>
+
+            <div class="wallet-balance">
+                ₦<%= user.balance.toLocaleString() %>
+            </div>
+
+            <div class="wallet-bottom">
+
+                <div class="wallet-status">
+                    <span class="status-dot"></span>
+                    Demo account active
+                </div>
+
+                <div class="wallet-actions">
+
+                    <button class="wallet-btn">
+                        Withdraw
+                    </button>
+
+                    <button class="wallet-btn primary">
+                        <a href="/deposit">Deposit</a>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <div class="quick-actions">
+
+        <a href="/" class="quick-action">
+
+            <div class="quick-icon">⚽</div>
+
+            <div>
+                <strong>Place a Bet</strong>
+                <span>Browse sports</span>
+            </div>
+
+        </a>
+
+
+        <a href="/my-bets" class="quick-action">
+
+            <div class="quick-icon">🎟️</div>
+
+            <div>
+                <strong>My Bets</strong>
+                <span>View your bets</span>
+            </div>
+
+        </a>
+
+
+        <a href="/my-bets" class="quick-action">
+
+            <div class="quick-icon">💰</div>
+
+            <div>
+                <strong>Transactions</strong>
+                <span>Wallet activity</span>
+            </div>
+
+        </a>
+
+
+        <a href="/logout" class="quick-action">
+
+            <div class="quick-icon">↪</div>
+
+            <div>
+                <strong>Logout</strong>
+                <span>Sign out securely</span>
+            </div>
+
+        </a>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- LEFT -->
+
+        <div>
+
+            <!-- BETTING STATISTICS -->
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <h3>Betting Overview</h3>
+
+                    <a href="#">View history</a>
+
+                </div>
+
+                <div class="stats">
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            TOTAL BETS
+                        </div>
+
+                        <div class="stat-value">
+                            <%= totalBets %>
+                        </div>
+
+                        <div class="stat-change">
+                            No bets yet
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            WON
+                        </div>
+
+                        <div class="stat-value">
+                            <%= wonBets %>
+                        </div>
+
+                        <div class="stat-change">
+                            <%= lostBets %> lost
+                        </div>
+
+                    </div>
+
+
+                    <div class="stat">
+
+                        <div class="stat-label">
+                            WIN RATE
+                        </div>
+
+                        <div class="stat-value">
+                            <%= winRate %>%
+                        </div>
+
+                        <div class="stat-change">
+                            <% if (totalBets === 0) { %>
+                                Start betting
+                            <% } else { %>
+                                Based on settled bets
+                            <% } %>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT BETS -->
+
+            <!-- RECENT BETS -->
+
+            <div class="dashboard-card" style="margin-top:20px;">
+
+                <div class="card-header">
+
+                    <h3>Recent Bets</h3>
+
+                    <a href="/my-bets">
+                        View all
+                    </a>
+
+                </div>
+
+
+                <% if (recentBets.length === 0) { %>
+
+                    <div class="bet-row">
+
+                        <div>
+
+                            <div class="bet-teams">
+                                No bets placed yet
+                            </div>
+
+                            <div class="bet-meta">
+                                Your recent bets will appear here.
+                            </div>
+
+                        </div>
+
+                        <div class="bet-result">
+
+                            <span class="bet-status pending">
+                                EMPTY
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                <% } else { %>
+
+
+                    <% recentBets.forEach(bet => { %>
+
+                        <div class="bet-row">
+
+                            <div>
+
+                                <div class="bet-teams">
+
+                                    <% if (bet.selections.length === 1) { %>
+
+                                        <%= bet.selections[0].homeTeam %>
+                                        vs
+                                        <%= bet.selections[0].awayTeam %>
+
+                                    <% } else { %>
+
+                                        <%= bet.selections.length %>
+                                        selections
+
+                                    <% } %>
+
+                                </div>
+
+
+                                <div class="bet-meta">
+
+                                    <%= bet.selections.length %> selection<%= bet.selections.length === 1 ? "" : "s" %>
+                                    ·
+                                    Odds <%= bet.totalOdds.toFixed(2) %>
+                                    ·
+                                    ₦<%= bet.stake.toLocaleString() %>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="bet-result">
+
+                                <div class="bet-amount">
+
+                                    ₦<%= bet.potentialWin.toLocaleString() %>
+
+                                </div>
+
+
+                                <span class="bet-status <%= bet.status %>">
+
+                                    <%= bet.status.toUpperCase() %>
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    <% }) %>
+
+
+                <% } %>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT -->
+
+        <div>
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+                    <h3>Account</h3>
+                </div>
+
+
+                <div class="profile-card">
+
+                    <div class="profile-top">
+
+                        <div class="profile-avatar">
+                            <%= user.name.charAt(0).toUpperCase() %>
+                        </div>
+
+                        <div>
+
+                            <div class="profile-name">
+                                <%= user.name %>
+                            </div>
+
+                            <div class="profile-email">
+                                <%= user.email %>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-links">
+
+                        <a href="#" class="profile-link">
+                            <span>Profile</span>
+                            <span>›</span>
+                        </a>
+
+                        <a href="#" class="profile-link">
+                            <span>Security</span>
+                            <span>›</span>
+                        </a>
+
+                        <a href="#" class="profile-link">
+                            <span>Betting History</span>
+                            <span>›</span>
+                        </a>
+
+                        <a href="/logout" class="profile-link">
+                            <span>Logout</span>
+                            <span>›</span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+<%- include("partials/footer") %>

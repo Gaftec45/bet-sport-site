@@ -1,0 +1,81 @@
+<%- include("partials/head") %>
+<%- include("partials/navbar") %>
+
+<section class="auth-section">
+    <div class="container">
+        <div class="auth-card">
+
+            <div class="auth-header">
+                <span class="section-label">CREATE AN ACCOUNT</span>
+                <h1>Create your account</h1>
+                <p>Join the BetSports and start with funds.</p>
+            </div>
+
+            <% if (error) { %>
+                <div class="error-message">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <form action="/register" method="POST">
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Minimum 6 characters"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Confirm your password"
+                        required
+                    >
+                </div>
+
+                <button type="submit" class="primary-btn auth-btn">
+                    Create Account
+                </button>
+
+            </form>
+
+            <p class="auth-footer">
+                Already have an account?
+                <a href="/login">Login</a>
+            </p>
+
+        </div>
+    </div>
+</section>
+
+<%- include("partials/footer") %>

@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Withdraw - Bet Lord</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #111827;
+        }
+
+        .topbar {
+            background: #111827;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        .dashboard-link {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 35px auto;
+            padding: 0 18px;
+        }
+
+        .balance-card {
+            background: white;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .balance-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .balance {
+            font-size: 30px;
+            font-weight: bold;
+            margin-top: 7px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+        }
+
+        .verify-btn {
+            width: 100%;
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 13px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .verify-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .account-result {
+            display: none;
+            margin-top: 15px;
+            padding: 14px;
+            border-radius: 8px;
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+        }
+
+        .account-result strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .verified {
+            color: #047857;
+        }
+
+        .error {
+            display: none;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            font-size: 14px;
+        }
+
+        .withdraw-section {
+            display: none;
+            margin-top: 25px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 25px;
+        }
+
+        .withdraw-btn {
+            width: 100%;
+            border: none;
+            background: #16a34a;
+            color: white;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .withdraw-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .note {
+            margin-top: 15px;
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .history {
+            margin-top: 25px;
+        }
+
+        .history-item {
+            background: white;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+        }
+
+        .history-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .amount {
+            font-weight: bold;
+        }
+
+        .status {
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .pending {
+            color: #d97706;
+        }
+
+        .approved {
+            color: #2563eb;
+        }
+
+        .processing {
+            color: #7c3aed;
+        }
+
+        .completed {
+            color: #16a34a;
+        }
+
+        .rejected,
+        .cancelled {
+            color: #dc2626;
+        }
+
+        .details {
+            margin-top: 8px;
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                margin-top: 20px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .balance {
+                font-size: 26px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="topbar">
+
+        <div class="brand">
+            Bet Lord
+        </div>
+
+        <a
+            href="/dashboard"
+            class="dashboard-link"
+        >
+            Dashboard
+        </a>
+
+    </div>
+
+
+    <div class="container">
+
+        <!-- BALANCE -->
+
+        <div class="balance-card">
+
+            <div class="balance-label">
+                Available Balance
+            </div>
+
+            <div class="balance">
+
+                ₦<%= Number(currentUser.balance || 0).toLocaleString() %>
+
+            </div>
+
+        </div>
+
+
+        <!-- WITHDRAWAL CARD -->
+
+        <div class="card">
+
+            <h2>
+                Withdraw Funds
+            </h2>
+
+
+            <!-- BANK -->
+
+            <div class="form-group">
+
+                <label for="bank">
+                    Select Bank
+                </label>
+
+                <select id="bank">
+
+                    <option value="">
+                        Loading banks...
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ACCOUNT NUMBER -->
+
+            <div class="form-group">
+
+                <label for="accountNumber">
+                    Account Number
+                </label>
+
+                <input
+                    type="text"
+                    id="accountNumber"
+                    maxlength="10"
+                    inputmode="numeric"
+                    placeholder="Enter 10-digit account number"
+                >
+
+            </div>
+
+
+            <!-- VERIFY -->
+
+            <button
+                type="button"
+                class="verify-btn"
+                id="verifyBtn"
+            >
+                Verify Account
+            </button>
+
+
+            <!-- ERROR -->
+
+            <div
+                class="error"
+                id="errorMessage"
+            ></div>
+
+
+            <!-- VERIFIED ACCOUNT -->
+
+            <div
+                class="account-result"
+                id="accountResult"
+            >
+
+                <strong class="verified">
+                    ✓ Account Verified
+                </strong>
+
+                <div id="accountName"></div>
+
+            </div>
+
+
+            <!-- WITHDRAW SECTION -->
+
+            <div
+                class="withdraw-section"
+                id="withdrawSection"
+            >
+
+                <div class="form-group">
+
+                    <label for="amount">
+                        Withdrawal Amount
+                    </label>
+
+                    <input
+                        type="number"
+                        id="amount"
+                        min="100"
+                        step="1"
+                        placeholder="Minimum ₦100"
+                    >
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="withdraw-btn"
+                    id="withdrawBtn"
+                >
+                    Request Withdrawal
+                </button>
+
+                <div class="note">
+
+                    Minimum withdrawal is ₦100.
+                    Your balance will be deducted immediately.
+                    If the withdrawal is rejected, the amount will be refunded.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- HISTORY -->
+
+        <div class="history">
+
+            <h2>
+                Withdrawal History
+            </h2>
+
+            <% if (withdrawals && withdrawals.length > 0) { %>
+
+                <% withdrawals.forEach(withdrawal => { %>
+
+                    <div class="history-item">
+
+                        <div class="history-top">
+
+                            <div class="amount">
+                                ₦<%= Number(withdrawal.amount).toLocaleString() %>
+                            </div>
+
+                            <div
+                                class="status <%= withdrawal.status %>"
+                            >
+                                <%= withdrawal.status %>
+                            </div>
+
+                        </div>
+
+                        <div class="details">
+
+                            <div>
+                                <strong>Bank:</strong>
+                                <%= withdrawal.bankName %>
+                            </div>
+
+                            <div>
+                                <strong>Account:</strong>
+                                <%= withdrawal.accountNumber %>
+                            </div>
+
+                            <div>
+                                <strong>Account Name:</strong>
+                                <%= withdrawal.accountName %>
+                            </div>
+
+                            <div>
+                                <strong>Reference:</strong>
+                                <%= withdrawal.reference %>
+                            </div>
+
+                            <div>
+                                <strong>Date:</strong>
+                                <%= new Date(withdrawal.createdAt).toLocaleString() %>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            <% } else { %>
+
+                <div class="history-item">
+
+                    No withdrawals yet.
+
+                </div>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+
+<script>
+
+    const bankSelect =
+        document.getElementById("bank");
+
+    const accountNumberInput =
+        document.getElementById("accountNumber");
+
+    const verifyBtn =
+        document.getElementById("verifyBtn");
+
+    const errorMessage =
+        document.getElementById("errorMessage");
+
+    const accountResult =
+        document.getElementById("accountResult");
+
+    const accountName =
+        document.getElementById("accountName");
+
+    const withdrawSection =
+        document.getElementById("withdrawSection");
+
+    const amountInput =
+        document.getElementById("amount");
+
+    const withdrawBtn =
+        document.getElementById("withdrawBtn");
+
+
+    let verifiedAccount = null;
+
+
+    // ===============================
+    // LOAD BANKS
+    // ===============================
+
+    async function loadBanks() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/paystack/banks"
+                );
+
+            const data =
+                await response.json();
+
+            if (!data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to load banks."
+                );
+
+            }
+
+            bankSelect.innerHTML =
+                '<option value="">Select your bank</option>';
+
+
+            data.banks.forEach(bank => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = bank.code;
+
+                option.textContent =
+                    bank.name;
+
+                option.dataset.name =
+                    bank.name;
+
+                bankSelect.appendChild(option);
+
+            });
+
+        } catch (error) {
+
+            bankSelect.innerHTML =
+                '<option value="">Unable to load banks</option>';
+
+            showError(error.message);
+
+        }
+
+    }
+
+
+    // ===============================
+    // VERIFY ACCOUNT
+    // ===============================
+
+    verifyBtn.addEventListener(
+        "click",
+        async function () {
+
+            hideError();
+
+            accountResult.style.display =
+                "none";
+
+            withdrawSection.style.display =
+                "none";
+
+            verifiedAccount = null;
+
+
+            const bankCode =
+                bankSelect.value;
+
+            const accountNumber =
+                accountNumberInput.value.trim();
+
+
+            if (!bankCode) {
+
+                showError(
+                    "Please select your bank."
+                );
+
+                return;
+            }
+
+
+            if (!/^\d{10}$/.test(accountNumber)) {
+
+                showError(
+                    "Account number must be exactly 10 digits."
+                );
+
+                return;
+            }
+
+
+            verifyBtn.disabled = true;
+
+            verifyBtn.textContent =
+                "Verifying...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/paystack/resolve-account?accountNumber=${encodeURIComponent(accountNumber)}&bankCode=${encodeURIComponent(bankCode)}`
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok ||
+                    !data.success) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to verify account."
+                    );
+
+                }
+
+
+                verifiedAccount =
+                    data.account;
+
+
+                accountName.textContent =
+                    data.account.accountName;
+
+
+                accountResult.style.display =
+                    "block";
+
+
+                withdrawSection.style.display =
+                    "block";
+
+
+            } catch (error) {
+
+                showError(
+                    error.message
+                );
+
+            } finally {
+
+                verifyBtn.disabled =
+                    false;
+
+                verifyBtn.textContent =
+                    "Verify Account";
+
+            }
+
+        }
+    );
+
+
+    // ===============================
+    // REQUEST WITHDRAWAL
+    // ===============================
+
+    withdrawBtn.addEventListener(
+        "click",
+        async function () {
+
+            hideError();
+
+
+            if (!verifiedAccount) {
+
+                showError(
+                    "Please verify your bank account first."
+                );
+
+                return;
+            }
+
+
+            const amount =
+                Number(
+                    amountInput.value
+                );
+
+
+            if (!amount || amount < 100) {
+
+                showError(
+                    "Minimum withdrawal is ₦100."
+                );
+
+                return;
+            }
+
+
+            withdrawBtn.disabled =
+                true;
+
+            withdrawBtn.textContent =
+                "Submitting...";
+
+
+            try {
+
+                const form =
+                    document.createElement("form");
+
+                form.method =
+                    "POST";
+
+                form.action =
+                    "/withdraw";
+
+
+                const fields = {
+
+                    amount:
+                        amount,
+
+                    bankName:
+                        bankSelect.options[
+                            bankSelect.selectedIndex
+                        ].dataset.name,
+
+                    bankCode:
+                        verifiedAccount.bankCode,
+
+                    accountNumber:
+                        verifiedAccount.accountNumber,
+
+                    accountName:
+                        verifiedAccount.accountName
+
+                };
+
+
+                Object.keys(fields).forEach(
+                    key => {
+
+                        const input =
+                            document.createElement(
+                                "input"
+                            );
+
+                        input.type =
+                            "hidden";
+
+                        input.name =
+                            key;
+
+                        input.value =
+                            fields[key];
+
+                        form.appendChild(
+                            input
+                        );
+
+                    }
+                );
+
+
+                document.body.appendChild(
+                    form
+                );
+
+                form.submit();
+
+
+            } catch (error) {
+
+                showError(
+                    error.message
+                );
+
+                withdrawBtn.disabled =
+                    false;
+
+                withdrawBtn.textContent =
+                    "Request Withdrawal";
+
+            }
+
+        }
+    );
+
+
+    // ===============================
+    // ERROR FUNCTIONS
+    // ===============================
+
+    function showError(message) {
+
+        errorMessage.textContent =
+            message;
+
+        errorMessage.style.display =
+            "block";
+
+    }
+
+
+    function hideError() {
+
+        errorMessage.textContent =
+            "";
+
+        errorMessage.style.display =
+            "none";
+
+    }
+
+
+    // LOAD BANKS
+    loadBanks();
+
+</script>
+
+</body>
+</html>

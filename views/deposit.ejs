@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title><%= title %> - BetSports</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    :root {
+        --primary: #16a34a;
+        --primary-dark: #15803d;
+        --primary-light: #dcfce7;
+        --bg: #f4f7f6;
+        --card: #ffffff;
+        --text: #17201b;
+        --muted: #6b7280;
+        --border: #e5e7eb;
+        --danger: #dc2626;
+        --danger-bg: #fee2e2;
+        --warning: #d97706;
+        --warning-bg: #fef3c7;
+    }
+
+    body {
+        margin: 0;
+        font-family:
+            Inter,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            Arial,
+            sans-serif;
+
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    /* HEADER */
+
+    .topbar {
+        height: 72px;
+        background: #ffffff;
+        border-bottom: 1px solid var(--border);
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0 32px;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        text-decoration: none;
+        color: var(--text);
+
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .brand-icon {
+        width: 38px;
+        height: 38px;
+
+        border-radius: 11px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background: var(--primary);
+        color: white;
+
+        font-size: 19px;
+        font-weight: 800;
+    }
+
+    .back-link {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .back-link:hover {
+        color: var(--primary);
+    }
+
+
+    /* MAIN */
+
+    .container {
+        width: 100%;
+        max-width: 1080px;
+
+        margin: 0 auto;
+
+        padding: 36px 20px 60px;
+    }
+
+    .page-heading {
+        margin-bottom: 28px;
+    }
+
+    .page-heading h1 {
+        margin: 0 0 7px;
+
+        font-size: 30px;
+        letter-spacing: -0.7px;
+    }
+
+    .page-heading p {
+        margin: 0;
+
+        color: var(--muted);
+        font-size: 15px;
+    }
+
+
+    /* ALERTS */
+
+    .alert {
+        border-radius: 14px;
+
+        padding: 16px 18px;
+
+        margin-bottom: 22px;
+
+        display: flex;
+        align-items: flex-start;
+        gap: 13px;
+    }
+
+    .alert-icon {
+        width: 34px;
+        height: 34px;
+
+        flex-shrink: 0;
+
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-weight: 800;
+    }
+
+    .alert-content strong {
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .alert-content span {
+        font-size: 14px;
+        color: var(--muted);
+    }
+
+    .alert.success {
+        background: var(--primary-light);
+        border: 1px solid #bbf7d0;
+    }
+
+    .alert.success .alert-icon {
+        background: var(--primary);
+        color: white;
+    }
+
+    .alert.success strong {
+        color: var(--primary-dark);
+    }
+
+    .alert.failed {
+        background: var(--danger-bg);
+        border: 1px solid #fecaca;
+    }
+
+    .alert.failed .alert-icon {
+        background: var(--danger);
+        color: white;
+    }
+
+    .alert.failed strong {
+        color: var(--danger);
+    }
+
+
+    /* GRID */
+
+    .wallet-grid {
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1.25fr)
+            minmax(320px, 0.75fr);
+
+        gap: 22px;
+
+        margin-bottom: 22px;
+    }
+
+
+    /* CARDS */
+
+    .card {
+        background: var(--card);
+
+        border: 1px solid var(--border);
+
+        border-radius: 18px;
+
+        box-shadow:
+            0 4px 20px rgba(16, 24, 40, 0.04);
+    }
+
+
+    /* BALANCE */
+
+    .balance-card {
+        padding: 28px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #166534 0%,
+                #15803d 48%,
+                #16a34a 100%
+            );
+
+        color: white;
+
+        border: none;
+
+        min-height: 245px;
+
+        position: relative;
+        overflow: hidden;
+    }
+
+    .balance-card::after {
+        content: "";
+
+        position: absolute;
+
+        width: 230px;
+        height: 230px;
+
+        right: -90px;
+        bottom: -110px;
+
+        border-radius: 50%;
+
+        background: rgba(255,255,255,0.08);
+    }
+
+    .balance-label {
+        font-size: 13px;
+
+        opacity: 0.8;
+
+        margin-bottom: 12px;
+    }
+
+    .balance-value {
+        font-size: 40px;
+
+        font-weight: 800;
+
+        letter-spacing: -1px;
+
+        margin-bottom: 25px;
+    }
+
+    .balance-note {
+        font-size: 13px;
+        opacity: 0.78;
+    }
+
+
+    /* DEPOSIT FORM */
+
+    .deposit-card {
+        padding: 26px;
+    }
+
+    .card-title {
+        margin: 0;
+
+        font-size: 19px;
+        font-weight: 750;
+    }
+
+    .card-subtitle {
+        margin: 6px 0 22px;
+
+        font-size: 13px;
+
+        color: var(--muted);
+    }
+
+    .amount-label {
+        display: block;
+
+        font-size: 13px;
+
+        font-weight: 700;
+
+        margin-bottom: 8px;
+    }
+
+    .amount-wrapper {
+        position: relative;
+
+        margin-bottom: 14px;
+    }
+
+    .currency {
+        position: absolute;
+
+        left: 15px;
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        font-weight: 700;
+
+        color: var(--muted);
+    }
+
+    .amount-input {
+        width: 100%;
+
+        height: 54px;
+
+        border: 1px solid #d1d5db;
+
+        border-radius: 11px;
+
+        padding:
+            0 15px 0 43px;
+
+        outline: none;
+
+        font-size: 17px;
+
+        font-weight: 650;
+
+        color: var(--text);
+
+        transition: 0.2s;
+    }
+
+    .amount-input:focus {
+        border-color: var(--primary);
+
+        box-shadow:
+            0 0 0 3px rgba(22,163,74,0.10);
+    }
+
+
+    /* QUICK AMOUNTS */
+
+    .quick-label {
+        font-size: 12px;
+
+        color: var(--muted);
+
+        margin-bottom: 9px;
+    }
+
+    .quick-amounts {
+        display: grid;
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+        gap: 8px;
+
+        margin-bottom: 18px;
+    }
+
+    .quick-btn {
+        border: 1px solid var(--border);
+
+        background: #fafafa;
+
+        border-radius: 9px;
+
+        padding: 10px 5px;
+
+        cursor: pointer;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        color: #374151;
+
+        transition: 0.2s;
+    }
+
+    .quick-btn:hover {
+        border-color: var(--primary);
+
+        color: var(--primary);
+
+        background: var(--primary-light);
+    }
+
+
+    /* SUBMIT */
+
+    .deposit-button {
+        width: 100%;
+
+        height: 52px;
+
+        border: none;
+
+        border-radius: 11px;
+
+        background: var(--primary);
+
+        color: white;
+
+        font-size: 15px;
+
+        font-weight: 750;
+
+        cursor: pointer;
+
+        transition: 0.2s;
+    }
+
+    .deposit-button:hover {
+        background: var(--primary-dark);
+
+        transform: translateY(-1px);
+    }
+
+    .deposit-button:active {
+        transform: translateY(0);
+    }
+
+    .payment-note {
+        margin-top: 13px;
+
+        text-align: center;
+
+        font-size: 11px;
+
+        color: var(--muted);
+    }
+
+
+    /* PAYMENT METHODS */
+
+    .payment-method {
+        margin-top: 18px;
+
+        padding-top: 17px;
+
+        border-top: 1px solid var(--border);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+    }
+
+    .payment-info {
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+    }
+
+    .payment-icon {
+        width: 34px;
+        height: 34px;
+
+        border-radius: 9px;
+
+        background: #eef2ff;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 15px;
+    }
+
+    .payment-info strong {
+        display: block;
+
+        font-size: 12px;
+    }
+
+    .payment-info span {
+        font-size: 11px;
+
+        color: var(--muted);
+    }
+
+    .secure {
+        font-size: 11px;
+
+        color: var(--primary-dark);
+
+        font-weight: 700;
+    }
+
+
+    /* HISTORY */
+
+    .history-card {
+        padding: 26px;
+    }
+
+    .history-header {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-bottom: 20px;
+    }
+
+    .history-count {
+        background: #f3f4f6;
+
+        color: var(--muted);
+
+        font-size: 11px;
+
+        padding: 5px 9px;
+
+        border-radius: 20px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+
+        border-collapse: collapse;
+
+        min-width: 700px;
+    }
+
+    th {
+        padding:
+            11px 12px;
+
+        background: #f9fafb;
+
+        border-bottom: 1px solid var(--border);
+
+        text-align: left;
+
+        font-size: 11px;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.4px;
+
+        color: #6b7280;
+    }
+
+    td {
+        padding:
+            15px 12px;
+
+        border-bottom: 1px solid #f0f1f2;
+
+        font-size: 13px;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    tbody tr:hover {
+        background: #fafafa;
+    }
+
+    .amount {
+        font-weight: 750;
+    }
+
+    .reference {
+        font-family:
+            "SFMono-Regular",
+            Consolas,
+            monospace;
+
+        font-size: 11px;
+
+        color: #6b7280;
+    }
+
+    .status {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 6px;
+
+        padding: 5px 9px;
+
+        border-radius: 20px;
+
+        font-size: 10px;
+
+        font-weight: 800;
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+
+        border-radius: 50%;
+
+        background: currentColor;
+    }
+
+    .status.completed {
+        background: var(--primary-light);
+
+        color: var(--primary-dark);
+    }
+
+    .status.pending {
+        background: var(--warning-bg);
+
+        color: var(--warning);
+    }
+
+    .status.failed,
+    .status.cancelled {
+        background: var(--danger-bg);
+
+        color: var(--danger);
+    }
+
+
+    /* EMPTY STATE */
+
+    .empty-state {
+        text-align: center;
+
+        padding: 55px 20px;
+
+        color: var(--muted);
+    }
+
+    .empty-icon {
+        width: 58px;
+        height: 58px;
+
+        margin: 0 auto 14px;
+
+        border-radius: 16px;
+
+        background: #f3f4f6;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 23px;
+    }
+
+    .empty-state strong {
+        display: block;
+
+        color: var(--text);
+
+        margin-bottom: 5px;
+    }
+
+    .empty-state p {
+        margin: 0;
+
+        font-size: 13px;
+    }
+
+
+    /* MOBILE */
+
+    @media (max-width: 760px) {
+
+        .topbar {
+            height: 64px;
+
+            padding: 0 17px;
+        }
+
+        .brand {
+            font-size: 19px;
+        }
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+        }
+
+        .container {
+            padding:
+                25px 14px 45px;
+        }
+
+        .page-heading h1 {
+            font-size: 25px;
+        }
+
+        .wallet-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .balance-card {
+            min-height: 210px;
+        }
+
+        .balance-value {
+            font-size: 34px;
+        }
+
+        .deposit-card,
+        .history-card {
+            padding: 20px;
+        }
+
+        .quick-amounts {
+            grid-template-columns:
+                repeat(2, 1fr);
+        }
+
+        .back-link span {
+            display: none;
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+
+<a href="/" class="brand">
+
+    <div class="brand-icon">
+        ₦
+    </div>
+
+    BetSports
+
+</a>
+
+
+<a href="/dashboard" class="back-link">
+
+    ←
+
+    <span>
+        Back to Dashboard
+    </span>
+
+</a>
+
+
+</header>
+
+<main class="container">
+
+
+<div class="page-heading">
+
+    <h1>
+        Deposit Funds
+    </h1>
+
+    <p>
+        Add funds securely to your BetSports wallet.
+    </p>
+
+</div>
+
+
+
+<% if (typeof queryStatus !== "undefined") { %>
+
+
+    <% if (queryStatus === "success") { %>
+
+        <div class="alert success">
+
+            <div class="alert-icon">
+                ✓
+            </div>
+
+            <div class="alert-content">
+
+                <strong>
+                    Payment successful
+                </strong>
+
+                <span>
+                    Your wallet has been credited successfully.
+                </span>
+
+            </div>
+
+        </div>
+
+    <% } %>
+
+
+
+    <% if (queryStatus === "failed") { %>
+
+        <div class="alert failed">
+
+            <div class="alert-icon">
+                !
+            </div>
+
+            <div class="alert-content">
+
+                <strong>
+                    Payment could not be confirmed
+                </strong>
+
+                <span>
+                    Please check your payment details and try again.
+                </span>
+
+            </div>
+
+        </div>
+
+    <% } %>
+
+
+<% } %>
+
+
+
+<div class="wallet-grid">
+
+
+    <!-- BALANCE -->
+
+    <div class="card balance-card">
+
+        <div class="balance-label">
+            CURRENT WALLET BALANCE
+        </div>
+
+        <div class="balance-value">
+
+            ₦<%= currentUser
+                ? currentUser.balance.toLocaleString()
+                : "0"
+            %>
+
+        </div>
+
+        <div class="balance-note">
+            Available for placing bets and withdrawals.
+        </div>
+
+    </div>
+
+
+
+    <!-- DEPOSIT -->
+
+    <div class="card deposit-card">
+
+        <h2 class="card-title">
+            Add Money
+        </h2>
+
+        <p class="card-subtitle">
+            Enter the amount you want to deposit.
+        </p>
+
+
+        <form
+            action="/deposit"
+            method="POST"
+        >
+
+            <label class="amount-label">
+                Deposit amount
+            </label>
+
+
+            <div class="amount-wrapper">
+
+                <span class="currency">
+                    ₦
+                </span>
+
+                <input
+                    type="number"
+                    name="amount"
+                    id="amount"
+                    class="amount-input"
+                    min="100"
+                    step="100"
+                    placeholder="0.00"
+                    required
+                >
+
+            </div>
+
+
+            <div class="quick-label">
+                Quick select
+            </div>
+
+
+            <div class="quick-amounts">
+
+                <button
+                    type="button"
+                    class="quick-btn"
+                    onclick="setAmount(500)"
+                >
+                    ₦500
+                </button>
+
+                <button
+                    type="button"
+                    class="quick-btn"
+                    onclick="setAmount(1000)"
+                >
+                    ₦1,000
+                </button>
+
+                <button
+                    type="button"
+                    class="quick-btn"
+                    onclick="setAmount(5000)"
+                >
+                    ₦5,000
+                </button>
+
+                <button
+                    type="button"
+                    class="quick-btn"
+                    onclick="setAmount(10000)"
+                >
+                    ₦10,000
+                </button>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="deposit-button"
+            >
+                Continue to Secure Payment →
+            </button>
+
+
+            <div class="payment-note">
+                You will be redirected to our secure payment provider.
+            </div>
+
+        </form>
+
+
+        <div class="payment-method">
+
+            <div class="payment-info">
+
+                <div class="payment-icon">
+                    🔒
+                </div>
+
+                <div>
+
+                    <strong>
+                        Secure payment
+                    </strong>
+
+                    <span>
+                        Payments processed securely
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="secure">
+                SECURE
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- HISTORY -->
+
+<div class="card history-card">
+
+
+    <div class="history-header">
+
+        <h2 class="card-title">
+            Deposit History
+        </h2>
+
+        <span class="history-count">
+            <%= deposits.length %> transaction<%= deposits.length === 1 ? "" : "s" %>
+        </span>
+
+    </div>
+
+
+
+    <% if (deposits.length === 0) { %>
+
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                ₦
+            </div>
+
+            <strong>
+                No deposits yet
+            </strong>
+
+            <p>
+                Your deposit transactions will appear here.
+            </p>
+
+        </div>
+
+
+    <% } else { %>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Reference
+                        </th>
+
+                        <th>
+                            Payment
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <% deposits.forEach(deposit => { %>
+
+
+                        <tr>
+
+
+                            <td class="amount">
+
+                                ₦<%= deposit.amount.toLocaleString() %>
+
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="status <%= deposit.status %>"
+                                >
+
+                                    <span class="status-dot"></span>
+
+                                    <%= deposit.status.charAt(0).toUpperCase() +
+                                        deposit.status.slice(1)
+                                    %>
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="reference">
+
+                                    <%= deposit.reference %>
+
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    style="
+                                        font-size: 12px;
+                                        font-weight: 600;
+                                    "
+                                >
+                                    <%= deposit.paymentMethod || "Paystack" %>
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    style="
+                                        font-size: 12px;
+                                        color: #6b7280;
+                                    "
+                                >
+
+                                    <%= new Date(
+                                        deposit.createdAt
+                                    ).toLocaleString() %>
+
+                                </span>
+
+                            </td>
+
+
+                        </tr>
+
+
+                    <% }) %>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    <% } %>
+
+
+</div>
+
+
+</main>
+
+<script>
+
+    function setAmount(amount) {
+
+        const input =
+            document.getElementById("amount");
+
+        input.value = amount;
+
+        input.focus();
+
+    }
+
+</script>
+
+</body>
+
+</html>

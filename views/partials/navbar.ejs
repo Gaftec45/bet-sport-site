@@ -1,0 +1,56 @@
+<header class="navbar">
+
+    <div class="container navbar-inner">
+
+        <a href="/" class="logo">
+            Bet<span>Sports</span>
+        </a>
+
+        <nav class="nav-links">
+
+            <a href="/">Home</a>
+            <a href="#">Sports</a>
+            <a href="#">Live</a>
+            <a href="#">Virtual</a>
+
+        </nav>
+
+        <div class="nav-actions">
+
+            <% if (isLoggedIn && currentUser) { %>
+
+                <a href="/dashboard" class="user-balance">
+                    <span class="nav-user-name">
+                        <%= currentUser.name.split(" ")[0] %>
+                    </span>
+
+                    <span class="nav-balance">
+                        ₦<%= currentUser.balance.toLocaleString() %>
+                    </span>
+                </a>
+
+                <a href="/dashboard" class="dashboard-btn">
+                    Dashboard
+                </a>
+
+                <a href="/logout" class="logout-btn">
+                    Logout
+                </a>
+
+            <% } else { %>
+
+                <a href="/login" class="login-btn">
+                    Login
+                </a>
+
+                <a href="/register" class="register-btn">
+                    Register
+                </a>
+
+            <% } %>
+
+        </div>
+
+    </div>
+
+</header>

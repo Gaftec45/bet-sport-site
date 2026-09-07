@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title><%= title %> - BetSports</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6f8;
+            color: #111827;
+        }
+
+        .admin-header {
+            background: #111827;
+            color: white;
+            padding: 18px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .admin-brand h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .admin-brand span {
+            display: block;
+            margin-top: 4px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .admin-actions a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 14px;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .admin-actions a:hover {
+            background: rgba(255,255,255,.08);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px 20px 50px;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h2 {
+            margin: 0 0 7px;
+            font-size: 28px;
+        }
+
+        .page-header p {
+            margin: 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .search-box {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 20px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-form input {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-form input:focus {
+            border-color: #111827;
+        }
+
+        .search-form button {
+            border: none;
+            background: #111827;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 9px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .table-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h3 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        .count {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            background: #f9fafb;
+            color: #6b7280;
+            text-align: left;
+            padding: 13px 18px;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 16px 18px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .user-name {
+            font-weight: 700;
+        }
+
+        .email {
+            margin-top: 4px;
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .balance {
+            font-weight: 800;
+        }
+
+        .view-btn {
+            display: inline-block;
+            padding: 8px 13px;
+            border-radius: 7px;
+            background: #111827;
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .empty {
+            padding: 50px 20px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        @media (max-width: 600px) {
+
+            .admin-header {
+                padding: 15px;
+            }
+
+            .admin-actions a {
+                padding: 8px 10px;
+            }
+
+            .container {
+                padding: 20px 12px 40px;
+            }
+
+            .page-header h2 {
+                font-size: 23px;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-form button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header class="admin-header">
+
+    <div class="admin-brand">
+
+        <h1>BetSports</h1>
+
+        <span>Administration Panel</span>
+
+    </div>
+
+    <div class="admin-actions">
+
+        <a href="/admin">
+            Dashboard
+        </a>
+
+        <a href="/admin/bets">
+            Bets
+        </a>
+
+        <a href="/admin/logout">
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <div class="page-header">
+
+        <h2>
+            Users
+        </h2>
+
+        <p>
+            View and manage registered BetSports users.
+        </p>
+
+    </div>
+
+
+    <div class="search-box">
+
+        <form
+            action="/admin/users"
+            method="GET"
+            class="search-form"
+        >
+
+            <input
+                type="text"
+                name="search"
+                value="<%= search %>"
+                placeholder="Search by name or email..."
+            >
+
+            <button type="submit">
+                Search
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="table-card">
+
+        <div class="table-header">
+
+            <h3>
+                Registered Users
+            </h3>
+
+            <span class="count">
+                <%= users.length %> users
+            </span>
+
+        </div>
+
+
+        <% if (users.length === 0) { %>
+
+            <div class="empty">
+
+                No users found.
+
+            </div>
+
+        <% } else { %>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                User
+                            </th>
+
+                            <th>
+                                Balance
+                            </th>
+
+                            <th>
+                                Registered
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <% users.forEach(user => { %>
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="user-name">
+                                        <%= user.name %>
+                                    </div>
+
+                                    <div class="email">
+                                        <%= user.email %>
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="balance">
+
+                                        ₦<%= Number(
+                                            user.balance
+                                        ).toLocaleString() %>
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <%= new Date(
+                                        user.createdAt
+                                    ).toLocaleString() %>
+
+                                </td>
+
+
+                                <td>
+
+                                    <a
+                                        href="/admin/users/<%= user._id %>"
+                                        class="view-btn"
+                                    >
+                                        View
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        <% }) %>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>
