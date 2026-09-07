@@ -244,7 +244,7 @@ async function processWithdrawalPayment(withdrawalId) {
 
         // Create a unique Paystack transfer reference
         const transferReference =
-            `TRF_${Date.now()}_${Math.random()
+            `trf_${Date.now()}_${Math.random()
                 .toString(36)
                 .substring(2, 10)
                 .toUpperCase()}`;
