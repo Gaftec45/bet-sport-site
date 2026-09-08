@@ -194,7 +194,7 @@ a {
 
 .sport-card,
 .virtual-card,
-.game-card,
+/* .game-card, */
 .promo {
     background: white;
     border-radius: 12px;
@@ -215,7 +215,7 @@ a {
 
 /* GAMES */
 
-.game-card {
+/* .game-card {
     margin-bottom: 15px;
 }
 
@@ -254,7 +254,7 @@ a {
 .game-date {
     color: #6b7280;
     margin-bottom: 15px;
-}
+} */
 
 /* VIRTUAL */
 

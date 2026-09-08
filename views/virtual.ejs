@@ -1,0 +1,1226 @@
+<%- include("partials/head") %>
+
+<style>
+
+/* =========================================================
+   VIRTUAL SPORTS PAGE
+========================================================= */
+
+.virtual-page {
+    min-height: calc(100vh - 80px);
+    padding: 45px 0 100px;
+    background: #f8fafc;
+}
+
+.virtual-container {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.virtual-page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 25px;
+    margin-bottom: 28px;
+}
+
+.virtual-page-header-left {
+    min-width: 0;
+}
+
+.virtual-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+    color: #16a34a;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.virtual-label::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.10);
+}
+
+.virtual-page-header h1 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 36px;
+    line-height: 1.1;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.virtual-page-header p {
+    max-width: 650px;
+    margin: 9px 0 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   VIRTUAL SPORT TABS
+========================================================= */
+
+.virtual-sport-tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 7px;
+    overflow-x: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    background: #ffffff;
+    scrollbar-width: none;
+}
+
+.virtual-sport-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.virtual-sport-tab {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: #64748b;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
+}
+
+.virtual-sport-tab:hover {
+    color: #15803d;
+    background: #f0fdf4;
+}
+
+.virtual-sport-tab.active {
+    background: #16a34a;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.18);
+}
+
+.virtual-sport-tab.active:hover {
+    background: #15803d;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   VIRTUAL CONTENT LAYOUT
+========================================================= */
+
+.virtual-layout {
+    display: block;
+    width: 100%;
+}
+
+.virtual-games-section {
+    width: 100%;
+    min-width: 0;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.virtual-games-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 25px 0 15px;
+}
+
+.virtual-games-header-left {
+    min-width: 0;
+}
+
+.virtual-games-small-title {
+    display: block;
+    margin-bottom: 5px;
+    color: #94a3b8;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.virtual-games-header h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 23px;
+    font-weight: 900;
+    letter-spacing: -0.4px;
+}
+
+.virtual-games-header p {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   REFRESH BUTTON
+========================================================= */
+
+.virtual-refresh-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 38px;
+    padding: 0 13px;
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #475569;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+        border-color 0.18s ease,
+        background 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
+}
+
+.virtual-refresh-btn:hover {
+    border-color: #bbf7d0;
+    background: #f0fdf4;
+    color: #15803d;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   GAMES LIST
+========================================================= */
+
+.virtual-games-list {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+
+
+/* =========================================================
+   VIRTUAL GAME CARD
+========================================================= */
+
+.virtual-game-card {
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.025);
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.virtual-game-card:hover {
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 9px 28px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================================
+   GAME CARD HEADER
+========================================================= */
+
+.virtual-game-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    min-height: 58px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #ffffff;
+}
+
+.virtual-game-title-area {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+}
+
+.virtual-game-icon {
+    flex: 0 0 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: #f0fdf4;
+    font-size: 18px;
+}
+
+.virtual-game-title {
+    min-width: 0;
+}
+
+.virtual-game-title h3 {
+    margin: 0;
+    overflow: hidden;
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 900;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.virtual-game-title span {
+    display: block;
+    margin-top: 3px;
+    overflow: hidden;
+    color: #94a3b8;
+    font-size: 10px;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   GAME STATUS
+========================================================= */
+
+.virtual-game-status {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.virtual-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 27px;
+    padding: 0 9px;
+    border-radius: 999px;
+    background: #f0fdf4;
+    color: #15803d;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.virtual-status-badge .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    animation: virtualPulse 1.5s infinite;
+}
+
+@keyframes virtualPulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.45;
+        transform: scale(0.75);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.virtual-next-race {
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   GAME INFO BAR
+========================================================= */
+
+.virtual-game-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 9px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    background: #f8fafc;
+}
+
+.virtual-game-info-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.virtual-info-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #64748b;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.virtual-info-item strong {
+    color: #334155;
+    font-weight: 900;
+}
+
+.virtual-game-info-right {
+    flex: 0 0 auto;
+    color: #94a3b8;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   RUNNERS AREA
+========================================================= */
+
+.virtual-runners {
+    padding: 12px 16px 16px;
+}
+
+.virtual-runners-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 9px;
+}
+
+.virtual-runners-heading span {
+    color: #94a3b8;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.virtual-runners-heading small {
+    color: #cbd5e1;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   RUNNER GRID
+========================================================= */
+
+.virtual-runner-list {
+    display: grid;
+    grid-template-columns: repeat(
+        2,
+        minmax(0, 1fr)
+    );
+    gap: 8px;
+}
+
+
+/* =========================================================
+   RUNNER ROW
+========================================================= */
+
+.virtual-runner {
+    display: grid;
+    grid-template-columns:
+        36px
+        minmax(0, 1fr)
+        auto;
+    align-items: center;
+    gap: 9px;
+    min-height: 51px;
+    padding: 7px 9px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #ffffff;
+    transition:
+        border-color 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.virtual-runner:hover {
+    border-color: #bbf7d0;
+    background: #fafffb;
+}
+
+.virtual-runner-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.virtual-runner-details {
+    min-width: 0;
+}
+
+.virtual-runner-name {
+    overflow: hidden;
+    color: #334155;
+    font-size: 11px;
+    font-weight: 800;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.virtual-runner-meta {
+    margin-top: 2px;
+    color: #94a3b8;
+    font-size: 9px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   VIRTUAL ODDS BUTTON
+========================================================= */
+
+.virtual-odd-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 70px;
+    min-height: 37px;
+    padding: 0 10px;
+    border: 1px solid #dbe4ea;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #0f172a;
+    font-family: inherit;
+    cursor: pointer;
+    transition:
+        border-color 0.18s ease,
+        background 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.virtual-odd-button span {
+    color: #64748b;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.virtual-odd-button strong {
+    color: #0f172a;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.virtual-odd-button:hover:not(:disabled) {
+    border-color: #22c55e;
+    background: #f0fdf4;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(22, 163, 74, 0.08);
+}
+
+.virtual-odd-button.selected {
+    border-color: #16a34a;
+    background: #dcfce7;
+    box-shadow:
+        0 0 0 1px rgba(22, 163, 74, 0.10);
+}
+
+.virtual-odd-button.selected span {
+    color: #15803d;
+}
+
+.virtual-odd-button.selected strong {
+    color: #166534;
+}
+
+.virtual-odd-button:disabled,
+.virtual-odd-button.unavailable {
+    cursor: not-allowed;
+    border-color: #e5e7eb;
+    background: #f8fafc;
+    opacity: 0.5;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.virtual-games-empty {
+    padding: 60px 20px;
+    border: 1px dashed #cbd5e1;
+    border-radius: 15px;
+    background: #ffffff;
+    text-align: center;
+}
+
+.virtual-games-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 14px;
+    border-radius: 16px;
+    background: #f0fdf4;
+    font-size: 25px;
+}
+
+.virtual-games-empty h3 {
+    margin: 0;
+    color: #334155;
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.virtual-games-empty p {
+    max-width: 420px;
+    margin: 7px auto 0;
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   LOADING STATE
+========================================================= */
+
+.virtual-games-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 280px;
+    padding: 40px 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    background: #ffffff;
+}
+
+.virtual-loading-spinner {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 13px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #16a34a;
+    border-radius: 50%;
+    animation: virtualSpin 0.8s linear infinite;
+}
+
+@keyframes virtualSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.virtual-games-loading p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ERROR STATE
+========================================================= */
+
+.virtual-games-error {
+    padding: 45px 20px;
+    border: 1px solid #fecaca;
+    border-radius: 15px;
+    background: #ffffff;
+    text-align: center;
+}
+
+.virtual-error-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 12px;
+    border-radius: 14px;
+    background: #fef2f2;
+    color: #dc2626;
+    font-size: 20px;
+}
+
+.virtual-games-error h3 {
+    margin: 0;
+    color: #334155;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.virtual-games-error p {
+    margin: 6px 0 15px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.virtual-retry-btn {
+    min-height: 37px;
+    padding: 0 15px;
+    border: 0;
+    border-radius: 8px;
+    background: #16a34a;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   HIDDEN
+========================================================= */
+
+.virtual-hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   BET SLIP COMPATIBILITY
+========================================================= */
+
+.virtual-page ~ .bet-slip-toggle {
+    z-index: 999;
+}
+
+.virtual-page ~ .bet-slip {
+    z-index: 1000;
+}
+
+.virtual-page ~ .bet-slip-backdrop {
+    z-index: 998;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .virtual-page {
+        padding-top: 32px;
+    }
+
+    .virtual-page-header h1 {
+        font-size: 32px;
+    }
+
+    .virtual-runner-list {
+        grid-template-columns:
+            1fr;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .virtual-container {
+        width: calc(100% - 24px);
+    }
+
+    .virtual-page {
+        padding-top: 27px;
+        padding-bottom: 95px;
+    }
+
+    .virtual-page-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 21px;
+    }
+
+    .virtual-page-header h1 {
+        font-size: 29px;
+    }
+
+    .virtual-page-header p {
+        font-size: 13px;
+    }
+
+    .virtual-sport-tabs {
+        margin-bottom: 12px;
+        padding: 5px;
+        border-radius: 12px;
+    }
+
+    .virtual-sport-tab {
+        min-height: 39px;
+        padding: 0 13px;
+        font-size: 11px;
+    }
+
+    .virtual-games-header {
+        align-items: center;
+        margin-top: 21px;
+    }
+
+    .virtual-games-header h2 {
+        font-size: 20px;
+    }
+
+    .virtual-games-header p {
+        font-size: 11px;
+    }
+
+    .virtual-refresh-btn {
+        min-height: 35px;
+        padding: 0 10px;
+        font-size: 10px;
+    }
+
+    .virtual-game-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .virtual-game-status {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .virtual-game-info {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+        padding: 8px 12px;
+    }
+
+    .virtual-game-info-left {
+        gap: 9px;
+        flex-wrap: wrap;
+    }
+
+    .virtual-game-info-right {
+        display: none;
+    }
+
+    .virtual-runners {
+        padding: 10px 10px 12px;
+    }
+
+    .virtual-runner-list {
+        grid-template-columns:
+            1fr;
+        gap: 7px;
+    }
+
+    .virtual-runner {
+        grid-template-columns:
+            34px
+            minmax(0, 1fr)
+            auto;
+        min-height: 50px;
+        padding: 7px;
+    }
+
+    .virtual-runner-number {
+        width: 30px;
+        height: 30px;
+        font-size: 10px;
+    }
+
+    .virtual-runner-name {
+        font-size: 10px;
+    }
+
+    .virtual-runner-meta {
+        font-size: 8px;
+    }
+
+    .virtual-odd-button {
+        min-width: 65px;
+        min-height: 35px;
+        padding: 0 8px;
+    }
+
+    .virtual-odd-button span {
+        font-size: 8px;
+    }
+
+    .virtual-odd-button strong {
+        font-size: 11px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .virtual-container {
+        width: calc(100% - 18px);
+    }
+
+    .virtual-page-header h1 {
+        font-size: 27px;
+    }
+
+    .virtual-game-title h3 {
+        font-size: 13px;
+    }
+
+    .virtual-runner {
+        grid-template-columns:
+            31px
+            minmax(0, 1fr)
+            auto;
+        gap: 7px;
+    }
+
+    .virtual-runner-number {
+        width: 28px;
+        height: 28px;
+    }
+
+    .virtual-odd-button {
+        min-width: 61px;
+    }
+
+}
+
+</style>
+
+<%- include("partials/navbar") %>
+
+
+<main class="virtual-page">
+
+    <div class="virtual-container">
+
+
+        <!-- =====================================================
+             PAGE HEADER
+        ====================================================== -->
+
+        <header class="virtual-page-header">
+
+            <div class="virtual-page-header-left">
+
+                <span class="virtual-label">
+                    VIRTUAL SPORTS
+                </span>
+
+                <h1>
+                    Virtual Betting
+                </h1>
+
+                <p>
+                    Fast-paced virtual events with new races
+                    and competitions running throughout the day.
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================================
+             VIRTUAL SPORT TABS
+        ====================================================== -->
+
+        <nav
+            class="virtual-sport-tabs"
+            aria-label="Virtual sports"
+        >
+
+            <button
+                type="button"
+                class="virtual-sport-tab active"
+                data-game-type="all"
+            >
+                🎯 All
+            </button>
+
+            <button
+                type="button"
+                class="virtual-sport-tab"
+                data-game-type="DashingDerby"
+            >
+                🏇 Horse Racing
+            </button>
+
+            <button
+                type="button"
+                class="virtual-sport-tab"
+                data-game-type="PlatinumHounds"
+            >
+                🐕 Greyhounds
+            </button>
+
+            <button
+                type="button"
+                class="virtual-sport-tab"
+                data-game-type="HarnessRacing"
+            >
+                🏇 Harness
+            </button>
+
+            <button
+                type="button"
+                class="virtual-sport-tab"
+                data-game-type="MotorRacing"
+            >
+                🏎️ Motor Racing
+            </button>
+
+            <button
+                type="button"
+                class="virtual-sport-tab"
+                data-game-type="HorseRacingRouletteV2"
+            >
+                🎰 Roulette
+            </button>
+
+            <button
+                type="button"
+                class="virtual-sport-tab"
+                data-game-type="SteepleChase"
+            >
+                🏇 Steeple Chase
+            </button>
+
+            <button
+                type="button"
+                class="virtual-sport-tab"
+                data-game-type="SpeedSkating"
+            >
+                ⛸️ Speed Skating
+            </button>
+
+            <button
+                type="button"
+                class="virtual-sport-tab"
+                data-game-type="SingleSeaterMotorRacing"
+            >
+                🏎️ SS Racing
+            </button>
+
+        </nav>
+
+
+        <!-- =====================================================
+             CONTENT
+        ====================================================== -->
+
+        <div class="virtual-layout">
+
+            <section class="virtual-games-section">
+
+
+                <!-- =================================================
+                     SECTION HEADER
+                ================================================== -->
+
+                <div class="virtual-games-header">
+
+                    <div class="virtual-games-header-left">
+
+                        <span
+                            class="virtual-games-small-title"
+                            id="virtualSectionLabel"
+                        >
+                            VIRTUAL SPORTS
+                        </span>
+
+                        <h2 id="virtualSectionTitle">
+                            Upcoming Events
+                        </h2>
+
+                        <p id="virtualSectionDescription">
+                            Select an event and choose your odds.
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="virtual-refresh-btn"
+                        id="refreshVirtualGames"
+                    >
+                        ↻ Refresh
+                    </button>
+
+                </div>
+
+
+                <!-- =================================================
+                     LOADING
+                ================================================== -->
+
+                <div
+                    id="virtualGamesLoading"
+                    class="virtual-games-loading"
+                >
+
+                    <div class="virtual-loading-spinner"></div>
+
+                    <p>
+                        Loading virtual events...
+                    </p>
+
+                </div>
+
+
+                <!-- =================================================
+                     ERROR
+                ================================================== -->
+
+                <div
+                    id="virtualGamesError"
+                    class="virtual-games-error virtual-hidden"
+                >
+
+                    <div class="virtual-error-icon">
+                        ⚠
+                    </div>
+
+                    <h3>
+                        Unable to load virtual events
+                    </h3>
+
+                    <p id="virtualGamesErrorMessage">
+                        Please try again.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="virtual-retry-btn"
+                        id="retryVirtualGames"
+                    >
+                        Try Again
+                    </button>
+
+                </div>
+
+
+                <!-- =================================================
+                     EMPTY
+                ================================================== -->
+
+                <div
+                    id="virtualGamesEmpty"
+                    class="virtual-games-empty virtual-hidden"
+                >
+
+                    <div class="virtual-games-empty-icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        No virtual events available
+                    </h3>
+
+                    <p>
+                        There are currently no virtual events
+                        available for this category.
+                    </p>
+
+                </div>
+
+
+                <!-- =================================================
+                     GAMES
+                ================================================== -->
+
+                <div
+                    id="virtualGamesList"
+                    class="virtual-games-list"
+                ></div>
+
+
+            </section>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- =========================================================
+     SHARED BET SLIP
+========================================================= -->
+
+<%- include("partials/bet-slip") %>
+
+
+<%- include("partials/footer") %>
+
+
+<script src="/js/bet-slip.js"></script>
+<script src="/js/virtual.js"></script>
+
+</body>

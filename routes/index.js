@@ -25,8 +25,20 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
   res.render("home", {
-    title: "Bet Lord",
+    title: "BetSports",
   });
+});
+
+router.get("/sports", (req, res) => {
+    res.render("sports", {
+        title: "BetSports | Sport"
+    });
+});
+
+router.get("/virtuals", (req, res) => {
+    res.render("virtual", {
+        title: "BetSports | virtuals"
+    });
 });
 
 

@@ -1,504 +1,1213 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<%- include("partials/head") %>
 
-    <meta charset="UTF-8">
+<%- include("partials/navbar") %>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<style>
+/* =========================================================
+   WITHDRAWAL PAGE — PREMIUM SPORTSBOOK UI
+========================================================= */
 
-    <title>Withdraw - Bet Lord</title>
+:root {
+    --withdraw-bg: #f4f7f5;
+    --withdraw-surface: #ffffff;
+    --withdraw-surface-2: #f8faf9;
 
-    <style>
+    --withdraw-green: #16a34a;
+    --withdraw-green-dark: #15803d;
+    --withdraw-green-light: #dcfce7;
 
-        * {
-            box-sizing: border-box;
-        }
+    --withdraw-text: #111827;
+    --withdraw-text-soft: #374151;
+    --withdraw-muted: #6b7280;
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #111827;
-        }
+    --withdraw-border: #e5e7eb;
+    --withdraw-danger: #dc2626;
+    --withdraw-danger-bg: #fef2f2;
 
-        .topbar {
-            background: #111827;
-            color: white;
-            padding: 16px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    --withdraw-radius: 18px;
+    --withdraw-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+}
 
-        .brand {
-            font-size: 21px;
-            font-weight: bold;
-        }
 
-        .dashboard-link {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-        }
+/* =========================================================
+   PAGE
+========================================================= */
 
-        .container {
-            max-width: 700px;
-            margin: 35px auto;
-            padding: 0 18px;
-        }
+.container {
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 42px 0 80px;
+}
 
-        .balance-card {
-            background: white;
-            border-radius: 14px;
-            padding: 22px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-        }
 
-        .balance-label {
-            color: #6b7280;
-            font-size: 14px;
-        }
+/* =========================================================
+   PAGE INTRO
+========================================================= */
 
-        .balance {
-            font-size: 30px;
-            font-weight: bold;
-            margin-top: 7px;
-        }
+.container::before {
+    display: block;
 
-        .card {
-            background: white;
-            border-radius: 14px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-        }
+    color: var(--withdraw-green);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 
-        h2 {
-            margin-top: 0;
-            margin-bottom: 22px;
-        }
+    margin-bottom: 7px;
+}
 
-        .form-group {
-            margin-bottom: 18px;
-        }
+.container::after {
+    content: "";
+}
 
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 7px;
-        }
 
-        input,
-        select {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 15px;
-            outline: none;
-            background: white;
-        }
+/* =========================================================
+   BALANCE HERO
+========================================================= */
 
-        input:focus,
-        select:focus {
-            border-color: #2563eb;
-        }
+.balance-card {
+    position: relative;
 
-        .verify-btn {
-            width: 100%;
-            border: none;
-            background: #2563eb;
-            color: white;
-            padding: 13px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    overflow: hidden;
 
-        .verify-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+    min-height: 205px;
 
-        .account-result {
-            display: none;
-            margin-top: 15px;
-            padding: 14px;
-            border-radius: 8px;
-            background: #ecfdf5;
-            border: 1px solid #a7f3d0;
-        }
+    padding: 30px 34px;
 
-        .account-result strong {
-            display: block;
-            margin-bottom: 5px;
-        }
+    border-radius: 24px;
 
-        .verified {
-            color: #047857;
-        }
+    background:
+        linear-gradient(
+            135deg,
+            #052e16 0%,
+            #064e3b 48%,
+            #047857 100%
+        );
 
-        .error {
-            display: none;
-            margin-top: 12px;
-            padding: 12px;
-            border-radius: 8px;
-            background: #fef2f2;
-            color: #b91c1c;
-            border: 1px solid #fecaca;
-            font-size: 14px;
-        }
+    color: #ffffff;
 
-        .withdraw-section {
-            display: none;
-            margin-top: 25px;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 25px;
-        }
+    box-shadow:
+        0 18px 45px rgba(6, 78, 59, 0.20);
 
-        .withdraw-btn {
-            width: 100%;
-            border: none;
-            background: #16a34a;
-            color: white;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
-        .withdraw-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+    margin-bottom: 24px;
+}
 
-        .note {
-            margin-top: 15px;
-            color: #6b7280;
-            font-size: 13px;
-            line-height: 1.5;
-        }
 
-        .history {
-            margin-top: 25px;
-        }
+/* decorative circles */
 
-        .history-item {
-            background: white;
-            padding: 16px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
-        }
+.balance-card::before {
+    content: "";
 
-        .history-top {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
+    position: absolute;
 
-        .amount {
-            font-weight: bold;
-        }
+    width: 260px;
+    height: 260px;
 
-        .status {
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
+    right: -90px;
+    top: -130px;
 
-        .pending {
-            color: #d97706;
-        }
+    border-radius: 50%;
 
-        .approved {
-            color: #2563eb;
-        }
+    background: rgba(255,255,255,0.08);
+}
 
-        .processing {
-            color: #7c3aed;
-        }
 
-        .completed {
-            color: #16a34a;
-        }
+.balance-card::after {
+    content: "";
 
-        .rejected,
-        .cancelled {
-            color: #dc2626;
-        }
+    position: absolute;
 
-        .details {
-            margin-top: 8px;
-            color: #6b7280;
-            font-size: 13px;
-            line-height: 1.6;
-        }
+    width: 180px;
+    height: 180px;
 
-        @media (max-width: 600px) {
+    right: 90px;
+    bottom: -120px;
 
-            .container {
-                margin-top: 20px;
-            }
+    border-radius: 50%;
 
-            .card {
-                padding: 20px;
-            }
+    background: rgba(255,255,255,0.05);
+}
 
-            .balance {
-                font-size: 26px;
-            }
 
-        }
+.balance-label {
+    position: relative;
+    z-index: 2;
 
-    </style>
+    color: rgba(255,255,255,0.70);
 
-</head>
+    font-size: 13px;
+    font-weight: 700;
 
-<body>
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
 
-    <div class="topbar">
+    margin-bottom: 10px;
+}
 
-        <div class="brand">
-            Bet Lord
+
+.balance {
+    position: relative;
+    z-index: 2;
+
+    font-size: clamp(32px, 5vw, 48px);
+
+    line-height: 1;
+
+    font-weight: 900;
+
+    letter-spacing: -0.04em;
+}
+
+
+/* =========================================================
+   MAIN WITHDRAWAL AREA
+========================================================= */
+
+.card {
+    background: var(--withdraw-surface);
+
+    border: 1px solid var(--withdraw-border);
+
+    border-radius: var(--withdraw-radius);
+
+    padding: 30px;
+
+    box-shadow: var(--withdraw-shadow);
+
+    margin-bottom: 24px;
+}
+
+
+.card h2 {
+    margin: 0;
+
+    color: var(--withdraw-text);
+
+    font-size: 22px;
+    font-weight: 850;
+
+    letter-spacing: -0.02em;
+}
+
+
+.card h2::after {
+    content: "Securely withdraw your available funds to your bank account.";
+
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--withdraw-muted);
+
+    font-size: 13px;
+    font-weight: 500;
+
+    letter-spacing: 0;
+}
+
+
+/* =========================================================
+   FORM GRID
+========================================================= */
+
+.card > .form-group:first-of-type {
+    margin-top: 28px;
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--withdraw-text-soft);
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    height: 54px;
+
+    box-sizing: border-box;
+
+    padding: 0 16px;
+
+    border: 1px solid var(--withdraw-border);
+
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    color: var(--withdraw-text);
+
+    font-family: inherit;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+
+.form-group input::placeholder {
+    color: #9ca3af;
+    font-weight: 500;
+}
+
+
+.form-group input:hover,
+.form-group select:hover {
+    border-color: #cbd5d1;
+}
+
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--withdraw-green);
+
+    box-shadow:
+        0 0 0 4px rgba(22, 163, 74, 0.10);
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   ACCOUNT NUMBER
+========================================================= */
+
+#accountNumber {
+    letter-spacing: 0.08em;
+
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   VERIFY BUTTON
+========================================================= */
+
+.verify-btn {
+    width: 100%;
+
+    height: 54px;
+
+    border: 0;
+
+    border-radius: 12px;
+
+    background: #111827;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        box-shadow .18s ease;
+}
+
+
+.verify-btn:hover {
+    background: #1f2937;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(17, 24, 39, 0.14);
+}
+
+
+.verify-btn:active {
+    transform: translateY(0);
+}
+
+
+.verify-btn:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   ERROR
+========================================================= */
+
+.error {
+    display: none;
+
+    margin-top: 16px;
+
+    padding: 13px 15px;
+
+    border: 1px solid #fecaca;
+
+    border-radius: 11px;
+
+    background: var(--withdraw-danger-bg);
+
+    color: var(--withdraw-danger);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   VERIFIED ACCOUNT
+========================================================= */
+
+.account-result {
+    display: none;
+
+    position: relative;
+
+    margin-top: 20px;
+
+    padding: 20px;
+
+    border: 1px solid #bbf7d0;
+
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f0fdf4,
+            #ecfdf5
+        );
+}
+
+
+.account-result::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 18px;
+    bottom: 18px;
+
+    width: 4px;
+
+    border-radius: 0 5px 5px 0;
+
+    background: var(--withdraw-green);
+}
+
+
+.account-result .verified {
+    display: flex;
+
+    align-items: center;
+    gap: 8px;
+
+    color: var(--withdraw-green-dark);
+
+    font-size: 13px;
+    font-weight: 850;
+
+    margin-bottom: 8px;
+}
+
+
+.account-result .verified::before {
+    content: "✓";
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 21px;
+    height: 21px;
+
+    border-radius: 50%;
+
+    background: var(--withdraw-green);
+
+    color: #ffffff;
+
+    font-size: 12px;
+}
+
+
+#accountName {
+    color: #166534;
+
+    font-size: 17px;
+    font-weight: 850;
+
+    padding-left: 29px;
+}
+
+
+/* =========================================================
+   WITHDRAW SECTION
+========================================================= */
+
+.withdraw-section {
+    display: none;
+
+    margin-top: 24px;
+
+    padding-top: 25px;
+
+    border-top: 1px solid var(--withdraw-border);
+}
+
+
+.withdraw-section::before {
+    content: "Withdrawal details";
+
+    display: block;
+
+    color: var(--withdraw-text);
+
+    font-size: 15px;
+    font-weight: 850;
+
+    margin-bottom: 18px;
+}
+
+
+/* =========================================================
+   AMOUNT INPUT
+========================================================= */
+
+#amount {
+    height: 62px;
+
+    padding-left: 18px;
+
+    border-radius: 13px;
+
+    font-size: 22px;
+    font-weight: 850;
+
+    letter-spacing: -0.02em;
+}
+
+
+#amount::placeholder {
+    font-size: 14px;
+    font-weight: 500;
+
+    letter-spacing: 0;
+}
+
+
+/* =========================================================
+   WITHDRAW BUTTON
+========================================================= */
+
+.withdraw-btn {
+    width: 100%;
+
+    height: 58px;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--withdraw-green),
+            var(--withdraw-green-dark)
+        );
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 15px;
+    font-weight: 850;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 24px rgba(22, 163, 74, 0.20);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        filter .18s ease;
+}
+
+
+.withdraw-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 14px 30px rgba(22, 163, 74, 0.26);
+
+    filter: brightness(1.03);
+}
+
+
+.withdraw-btn:active {
+    transform: translateY(0);
+}
+
+
+.withdraw-btn:disabled {
+    opacity: 0.65;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* =========================================================
+   NOTE
+========================================================= */
+
+.note {
+    margin-top: 14px;
+
+    padding: 14px 16px;
+
+    border-radius: 11px;
+
+    background: #f8fafc;
+
+    color: var(--withdraw-muted);
+
+    font-size: 12px;
+
+    line-height: 1.65;
+}
+
+
+.note::before {
+    content: "ⓘ";
+
+    margin-right: 7px;
+
+    color: var(--withdraw-green);
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+.history {
+    margin-top: 28px;
+}
+
+
+.history h2 {
+    margin: 0 0 16px;
+
+    color: var(--withdraw-text);
+
+    font-size: 20px;
+    font-weight: 850;
+
+    letter-spacing: -0.02em;
+}
+
+
+.history-item {
+    background: var(--withdraw-surface);
+
+    border: 1px solid var(--withdraw-border);
+
+    border-radius: 16px;
+
+    padding: 20px 22px;
+
+    margin-bottom: 12px;
+
+    box-shadow:
+        0 4px 18px rgba(15, 23, 42, 0.035);
+
+    transition:
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.history-item:hover {
+    border-color: #d1d5db;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================================
+   HISTORY TOP
+========================================================= */
+
+.history-top {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 17px;
+}
+
+
+.history-top .amount {
+    color: var(--withdraw-text);
+
+    font-size: 21px;
+    font-weight: 900;
+
+    letter-spacing: -0.02em;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 76px;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    font-size: 11px;
+
+    font-weight: 850;
+
+    text-transform: capitalize;
+}
+
+
+.status.pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+
+.status.approved,
+.status.success,
+.status.completed {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+
+.status.rejected,
+.status.failed {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+
+.status.processing {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+
+/* =========================================================
+   HISTORY DETAILS
+========================================================= */
+
+.details {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px 20px;
+
+    padding-top: 16px;
+
+    border-top: 1px solid #f0f2f4;
+
+    color: var(--withdraw-muted);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+.details > div {
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.details strong {
+    color: var(--withdraw-text-soft);
+
+    font-weight: 750;
+}
+
+
+/* =========================================================
+   EMPTY HISTORY
+========================================================= */
+
+.history > .history-item:only-child {
+    padding: 35px 20px;
+
+    text-align: center;
+
+    color: var(--withdraw-muted);
+
+    font-size: 14px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #fafafa
+        );
+}
+
+
+.history > .history-item:only-child::before {
+    content: "↗";
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 45px;
+    height: 45px;
+
+    margin: 0 auto 12px;
+
+    border-radius: 50%;
+
+    background: var(--withdraw-green-light);
+
+    color: var(--withdraw-green-dark);
+
+    font-size: 20px;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .container {
+        width: min(100% - 22px, 1120px);
+
+        padding-top: 25px;
+        padding-bottom: 55px;
+    }
+
+
+    .balance-card {
+        min-height: 175px;
+
+        padding: 25px 22px;
+
+        border-radius: 20px;
+
+        margin-bottom: 16px;
+    }
+
+
+    .balance {
+        font-size: 34px;
+    }
+
+
+    .card {
+        padding: 22px 17px;
+
+        border-radius: 16px;
+    }
+
+
+    .card h2 {
+        font-size: 20px;
+    }
+
+
+    .card h2::after {
+        font-size: 12px;
+
+        line-height: 1.5;
+    }
+
+
+    .form-group input,
+    .form-group select {
+        height: 52px;
+    }
+
+
+    #amount {
+        height: 59px;
+
+        font-size: 20px;
+    }
+
+
+    .withdraw-btn {
+        height: 56px;
+    }
+
+
+    .history h2 {
+        font-size: 19px;
+    }
+
+
+    .history-item {
+        padding: 17px;
+
+        border-radius: 14px;
+    }
+
+
+    .history-top .amount {
+        font-size: 18px;
+    }
+
+
+    .details {
+        grid-template-columns: 1fr;
+
+        gap: 9px;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .container {
+        width: calc(100% - 16px);
+    }
+
+
+    .balance-card {
+        padding: 23px 18px;
+    }
+
+
+    .balance {
+        font-size: 30px;
+    }
+
+
+    .history-top {
+        align-items: flex-start;
+    }
+
+
+    .status {
+        min-width: auto;
+
+        padding: 6px 9px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        transition: none !important;
+    }
+
+}
+</style>
+
+
+<div class="container">
+
+    <!-- BALANCE -->
+
+    <div class="balance-card">
+
+        <div class="balance-label">
+            Available Balance
         </div>
 
-        <a
-            href="/dashboard"
-            class="dashboard-link"
-        >
-            Dashboard
-        </a>
+        <div class="balance">
+            ₦<%= Number(currentUser.balance || 0).toLocaleString() %>
+        </div>
 
     </div>
 
 
-    <div class="container">
+    <!-- WITHDRAWAL CARD -->
 
-        <!-- BALANCE -->
+    <div class="card">
 
-        <div class="balance-card">
+        <h2>
+            Withdraw Funds
+        </h2>
 
-            <div class="balance-label">
-                Available Balance
-            </div>
 
-            <div class="balance">
+        <!-- BANK -->
 
-                ₦<%= Number(currentUser.balance || 0).toLocaleString() %>
+        <div class="form-group">
 
-            </div>
+            <label for="bank">
+                Select Bank
+            </label>
+
+            <select id="bank">
+
+                <option value="">
+                    Loading banks...
+                </option>
+
+            </select>
 
         </div>
 
 
-        <!-- WITHDRAWAL CARD -->
+        <!-- ACCOUNT NUMBER -->
 
-        <div class="card">
+        <div class="form-group">
 
-            <h2>
-                Withdraw Funds
-            </h2>
+            <label for="accountNumber">
+                Account Number
+            </label>
+
+            <input
+                type="text"
+                id="accountNumber"
+                maxlength="10"
+                inputmode="numeric"
+                placeholder="Enter 10-digit account number"
+            >
+
+        </div>
 
 
-            <!-- BANK -->
+        <!-- VERIFY -->
+
+        <button
+            type="button"
+            class="verify-btn"
+            id="verifyBtn"
+        >
+            Verify Account
+        </button>
+
+
+        <!-- ERROR -->
+
+        <div
+            class="error"
+            id="errorMessage"
+        ></div>
+
+
+        <!-- VERIFIED ACCOUNT -->
+
+        <div
+            class="account-result"
+            id="accountResult"
+        >
+
+            <strong class="verified">
+                Account Verified
+            </strong>
+
+            <div id="accountName"></div>
+
+        </div>
+
+
+        <!-- WITHDRAW SECTION -->
+
+        <div
+            class="withdraw-section"
+            id="withdrawSection"
+        >
 
             <div class="form-group">
 
-                <label for="bank">
-                    Select Bank
-                </label>
-
-                <select id="bank">
-
-                    <option value="">
-                        Loading banks...
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <!-- ACCOUNT NUMBER -->
-
-            <div class="form-group">
-
-                <label for="accountNumber">
-                    Account Number
+                <label for="amount">
+                    Withdrawal Amount
                 </label>
 
                 <input
-                    type="text"
-                    id="accountNumber"
-                    maxlength="10"
-                    inputmode="numeric"
-                    placeholder="Enter 10-digit account number"
+                    type="number"
+                    id="amount"
+                    min="100"
+                    step="1"
+                    placeholder="Minimum ₦100"
                 >
 
             </div>
 
-
-            <!-- VERIFY -->
 
             <button
                 type="button"
-                class="verify-btn"
-                id="verifyBtn"
+                class="withdraw-btn"
+                id="withdrawBtn"
             >
-                Verify Account
+                Request Withdrawal
             </button>
 
 
-            <!-- ERROR -->
+            <div class="note">
 
-            <div
-                class="error"
-                id="errorMessage"
-            ></div>
-
-
-            <!-- VERIFIED ACCOUNT -->
-
-            <div
-                class="account-result"
-                id="accountResult"
-            >
-
-                <strong class="verified">
-                    ✓ Account Verified
-                </strong>
-
-                <div id="accountName"></div>
-
-            </div>
-
-
-            <!-- WITHDRAW SECTION -->
-
-            <div
-                class="withdraw-section"
-                id="withdrawSection"
-            >
-
-                <div class="form-group">
-
-                    <label for="amount">
-                        Withdrawal Amount
-                    </label>
-
-                    <input
-                        type="number"
-                        id="amount"
-                        min="100"
-                        step="1"
-                        placeholder="Minimum ₦100"
-                    >
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="withdraw-btn"
-                    id="withdrawBtn"
-                >
-                    Request Withdrawal
-                </button>
-
-                <div class="note">
-
-                    Minimum withdrawal is ₦100.
-                    Your balance will be deducted immediately.
-                    If the withdrawal is rejected, the amount will be refunded.
-
-                </div>
+                Minimum withdrawal is ₦100.
+                Your balance will be deducted immediately.
+                If the withdrawal is rejected, the amount will be refunded.
 
             </div>
 
         </div>
 
+    </div>
 
-        <!-- HISTORY -->
 
-        <div class="history">
+    <!-- HISTORY -->
 
-            <h2>
-                Withdrawal History
-            </h2>
+    <div class="history">
 
-            <% if (withdrawals && withdrawals.length > 0) { %>
+        <h2>
+            Withdrawal History
+        </h2>
 
-                <% withdrawals.forEach(withdrawal => { %>
+        <% if (withdrawals && withdrawals.length > 0) { %>
 
-                    <div class="history-item">
+            <% withdrawals.forEach(withdrawal => { %>
 
-                        <div class="history-top">
+                <div class="history-item">
 
-                            <div class="amount">
-                                ₦<%= Number(withdrawal.amount).toLocaleString() %>
-                            </div>
+                    <div class="history-top">
 
-                            <div
-                                class="status <%= withdrawal.status %>"
-                            >
-                                <%= withdrawal.status %>
-                            </div>
-
+                        <div class="amount">
+                            ₦<%= Number(withdrawal.amount).toLocaleString() %>
                         </div>
 
-                        <div class="details">
-
-                            <div>
-                                <strong>Bank:</strong>
-                                <%= withdrawal.bankName %>
-                            </div>
-
-                            <div>
-                                <strong>Account:</strong>
-                                <%= withdrawal.accountNumber %>
-                            </div>
-
-                            <div>
-                                <strong>Account Name:</strong>
-                                <%= withdrawal.accountName %>
-                            </div>
-
-                            <div>
-                                <strong>Reference:</strong>
-                                <%= withdrawal.reference %>
-                            </div>
-
-                            <div>
-                                <strong>Date:</strong>
-                                <%= new Date(withdrawal.createdAt).toLocaleString() %>
-                            </div>
-
+                        <div
+                            class="status <%= withdrawal.status %>"
+                        >
+                            <%= withdrawal.status %>
                         </div>
 
                     </div>
 
-                <% }) %>
 
-            <% } else { %>
+                    <div class="details">
 
-                <div class="history-item">
+                        <div>
+                            <strong>Bank:</strong>
+                            <%= withdrawal.bankName %>
+                        </div>
 
-                    No withdrawals yet.
+                        <div>
+                            <strong>Account:</strong>
+                            <%= withdrawal.accountNumber %>
+                        </div>
+
+                        <div>
+                            <strong>Account Name:</strong>
+                            <%= withdrawal.accountName %>
+                        </div>
+
+                        <div>
+                            <strong>Reference:</strong>
+                            <%= withdrawal.reference %>
+                        </div>
+
+                        <div>
+                            <strong>Date:</strong>
+                            <%= new Date(withdrawal.createdAt).toLocaleString() %>
+                        </div>
+
+                    </div>
 
                 </div>
 
-            <% } %>
+            <% }) %>
 
-        </div>
+        <% } else { %>
+
+            <div class="history-item">
+
+                No withdrawals yet.
+
+            </div>
+
+        <% } %>
 
     </div>
+
+</div>
+
+
+<%- include("partials/footer") %>
 
 
 <script>
@@ -656,8 +1365,10 @@
                     await response.json();
 
 
-                if (!response.ok ||
-                    !data.success) {
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
 
                     throw new Error(
                         data.message ||
@@ -861,6 +1572,3 @@
     loadBanks();
 
 </script>
-
-</body>
-</html>

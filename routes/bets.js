@@ -1,267 +1,198 @@
 const express = require("express");
 const router = express.Router();
-const { settleEvent } = require("../services/settlementService");
-const Bet = require("../models/Bet");
-const User = require("../models/User");
 
-const Transaction = require("../models/Transaction");
+const Bet = require("../models/Bet");
 
 const {
-    creditUser,
-    debitUser
-} = require("../services/walletService");
+    settleEvent
+} = require("../services/settlementService");
 
-// =============================
-// MY BETS PAGE
-// =============================
+const {
+    placeBet,
+    getUserBets,
+    getUserBet
+} = require("../services/betService");
+
+
+/*
+=========================================================
+MY BETS PAGE
+=========================================================
+*/
 
 router.get("/my-bets", async (req, res) => {
 
     try {
 
-        // User must be logged in
+        /*
+        -------------------------------------------------
+        CHECK LOGIN
+        -------------------------------------------------
+        */
 
         if (!req.session.userId) {
+
             return res.redirect("/login");
+
         }
 
 
-        // Find all bets belonging to this user
+        /*
+        -------------------------------------------------
+        GET USER BETS
+        -------------------------------------------------
+        */
 
-        const bets = await Bet.find({
-            user: req.session.userId
-        })
-        .sort({ createdAt: -1 });
+        const result =
+            await getUserBets(
+                req.session.userId
+            );
 
+
+        /*
+        -------------------------------------------------
+        RENDER PAGE
+        -------------------------------------------------
+        */
 
         res.render("my-bets", {
-            title: "My Bets",
-            bets
-        });
 
+            title: "My Bets",
+
+            bets: result.bets
+
+        });
 
     } catch (error) {
 
-        console.error("My Bets error:", error);
+        console.error(
+            "My Bets error:",
+            error
+        );
 
-        res.status(500).send("Unable to load your bets.");
+        res.status(500).send(
+            "Unable to load your bets."
+        );
 
     }
 
 });
 
 
+/*
+=========================================================
+PLACE BET
+=========================================================
+
+POST /api/bets
+
+Client sends:
+
+{
+    selections: [...],
+    stake: 1000
+}
+
+The server calculates:
+
+totalOdds
+potentialWin
+*/
+
 router.post("/api/bets", async (req, res) => {
 
     try {
 
+        /*
+        -------------------------------------------------
+        CHECK LOGIN
+        -------------------------------------------------
+        */
+
         if (!req.session.userId) {
 
             return res.status(401).json({
+
                 success: false,
-                message: "Please login before placing a bet."
+
+                message:
+                    "Please login before placing a bet."
+
             });
 
         }
 
+
+        /*
+        -------------------------------------------------
+        ONLY ACCEPT THESE VALUES
+        -------------------------------------------------
+        */
 
         const {
             selections,
-            stake,
-            totalOdds,
-            potentialWin
+            stake
         } = req.body;
 
 
-        if (
-            !Array.isArray(selections) ||
-            selections.length === 0
-        ) {
+        /*
+        -------------------------------------------------
+        PLACE BET
+        -------------------------------------------------
+        */
 
-            return res.status(400).json({
-                success: false,
-                message: "Your bet slip is empty."
+        const result =
+            await placeBet({
+
+                userId:
+                    req.session.userId,
+
+                selections,
+
+                stake
+
             });
-
-        }
-
-
-        const parsedStake = Number(stake);
-        const parsedOdds = Number(totalOdds);
-        const parsedPotentialWin = Number(potentialWin);
-
-
-        if (
-            !Number.isFinite(parsedStake) ||
-            parsedStake <= 0
-        ) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Invalid stake."
-            });
-
-        }
-
-
-        if (
-            !Number.isFinite(parsedOdds) ||
-            parsedOdds <= 0
-        ) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Invalid total odds."
-            });
-
-        }
-
-
-        if (
-            !Number.isFinite(parsedPotentialWin) ||
-            parsedPotentialWin <= 0
-        ) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Invalid potential win."
-            });
-
-        }
-
-
-        const user = await User.findById(
-            req.session.userId
-        );
-
-
-        if (!user) {
-
-            return res.status(401).json({
-                success: false,
-                message: "User account not found."
-            });
-
-        }
-
-
-        if (user.balance < parsedStake) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Insufficient balance."
-            });
-
-        }
 
 
         /*
-            Prepare selections
+        -------------------------------------------------
+        RESPONSE
+        -------------------------------------------------
         */
-
-        const preparedSelections =
-            selections.map(selection => ({
-
-                eventId: selection.eventId,
-
-                homeTeam: selection.homeTeam,
-
-                awayTeam: selection.awayTeam,
-
-                selection: selection.selection,
-
-                odds: Number(selection.odds),
-
-                status: "pending",
-
-                result: null
-
-            }));
-
-
-        /*
-            Create bet
-        */
-
-        const bet = await Bet.create({
-
-            user: user._id,
-
-            selections: preparedSelections,
-
-            stake: parsedStake,
-
-            totalOdds: parsedOdds,
-
-            potentialWin: parsedPotentialWin,
-
-            status: "pending",
-
-            payoutProcessed: false
-
-        });
-
-
-        /*
-            Deduct stake
-        */
-
-        const balanceBefore = user.balance;
-
-        user.balance -= parsedStake;
-
-        await user.save();
-
-
-        /*
-            Record transaction
-        */
-
-        await Transaction.create({
-
-            user: user._id,
-
-            type: "bet_stake",
-
-            amount: parsedStake,
-
-            balanceBefore,
-
-            balanceAfter: user.balance,
-
-            status: "completed",
-
-            description: `Stake for bet ${bet._id}`,
-
-            reference: `BET_STAKE_${bet._id}`
-
-        });
-
 
         res.json({
 
             success: true,
 
-            message: "Bet placed successfully.",
+            message:
+                "Bet placed successfully.",
 
             bet: {
 
-                id: bet._id,
+                id:
+                    result.bet._id,
 
-                stake: bet.stake,
+                reference:
+                    result.bet.reference,
 
-                totalOdds: bet.totalOdds,
+                stake:
+                    result.bet.stake,
 
-                potentialWin: bet.potentialWin,
+                totalOdds:
+                    result.bet.totalOdds,
 
-                status: bet.status
+                potentialWin:
+                    result.bet.potentialWin,
+
+                status:
+                    result.bet.status
 
             },
 
-            balance: user.balance
+            balance:
+                result.wallet.balance
 
         });
-
 
     } catch (error) {
 
@@ -271,11 +202,69 @@ router.post("/api/bets", async (req, res) => {
         );
 
 
+        /*
+        -------------------------------------------------
+        KNOWN USER ERRORS
+        -------------------------------------------------
+        */
+
+        const knownErrors = [
+
+            "Your bet slip is empty.",
+
+            "Invalid stake.",
+
+            "Insufficient balance.",
+
+            "User not found.",
+
+            "User account not found.",
+
+            "Invalid bet selection.",
+
+            "Every selection must have an event ID.",
+
+            "Every selection must have a selection.",
+
+            "Invalid odds.",
+
+            "Invalid sport type.",
+
+            "The same event cannot be selected more than once."
+
+        ];
+
+
+        if (
+            knownErrors.includes(
+                error.message
+            )
+        ) {
+
+            return res.status(400).json({
+
+                success: false,
+
+                message:
+                    error.message
+
+            });
+
+        }
+
+
+        /*
+        -------------------------------------------------
+        SERVER ERROR
+        -------------------------------------------------
+        */
+
         res.status(500).json({
 
             success: false,
 
-            message: "Unable to place bet."
+            message:
+                "Unable to place bet."
 
         });
 
@@ -284,30 +273,151 @@ router.post("/api/bets", async (req, res) => {
 });
 
 
-// =============================
-// BET DETAILS
-// =============================
+/*
+=========================================================
+MY BETS API
+=========================================================
+
+Optional API endpoint for dashboards/frontend.
+*/
+
+router.get("/api/bets", async (req, res) => {
+
+    try {
+
+        if (!req.session.userId) {
+
+            return res.status(401).json({
+
+                success: false,
+
+                message:
+                    "Please login."
+
+            });
+
+        }
+
+
+        const result =
+            await getUserBets(
+
+                req.session.userId,
+
+                {
+
+                    status:
+                        req.query.status,
+
+                    page:
+                        req.query.page,
+
+                    limit:
+                        req.query.limit
+
+                }
+
+            );
+
+
+        res.json({
+
+            success: true,
+
+            data:
+                result.bets,
+
+            pagination:
+                result.pagination
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Get bets error:",
+            error
+        );
+
+        res.status(500).json({
+
+            success: false,
+
+            message:
+                "Unable to load bets."
+
+        });
+
+    }
+
+});
+
+
+/*
+=========================================================
+BET DETAILS PAGE
+=========================================================
+*/
 
 router.get("/my-bets/:id", async (req, res) => {
 
     try {
 
-        // User must be logged in
+        /*
+        -------------------------------------------------
+        CHECK LOGIN
+        -------------------------------------------------
+        */
 
         if (!req.session.userId) {
+
             return res.redirect("/login");
+
         }
 
 
-        // Find the bet belonging to this user
+        /*
+        -------------------------------------------------
+        GET BET
+        -------------------------------------------------
+        */
 
-        const bet = await Bet.findOne({
-            _id: req.params.id,
-            user: req.session.userId
+        const bet =
+            await getUserBet(
+
+                req.session.userId,
+
+                req.params.id
+
+            );
+
+
+        /*
+        -------------------------------------------------
+        RENDER
+        -------------------------------------------------
+        */
+
+        res.render("bet-details", {
+
+            title: "Bet Details",
+
+            bet
+
         });
 
+    } catch (error) {
 
-        if (!bet) {
+        console.error(
+            "Bet details error:",
+            error
+        );
+
+
+        if (
+            error.message ===
+            "Bet not found."
+        ) {
 
             return res.status(404).send(
                 "Bet not found."
@@ -315,16 +425,6 @@ router.get("/my-bets/:id", async (req, res) => {
 
         }
 
-
-        res.render("bet-details", {
-            title: "Bet Details",
-            bet
-        });
-
-
-    } catch (error) {
-
-        console.error("Bet details error:", error);
 
         res.status(500).send(
             "Unable to load bet details."
@@ -335,71 +435,151 @@ router.get("/my-bets/:id", async (req, res) => {
 });
 
 
-// =============================
-// TEST SETTLEMENT
-// =============================
+/*
+=========================================================
+TEST SETTLEMENT
+=========================================================
 
-router.post("/api/bets/test-settle", async (req, res) => {
+THIS IS FOR DEVELOPMENT ONLY.
 
-    try {
+We will later replace this with the automatic
+settlement worker.
+*/
 
-        const {
-            eventId,
-            homeTeam,
-            awayTeam,
-            homeScore,
-            awayScore
-        } = req.body;
+router.post(
+    "/api/bets/test-settle",
+    async (req, res) => {
+
+        try {
+
+            const {
+
+                eventId,
+
+                homeTeam,
+
+                awayTeam,
+
+                homeScore,
+
+                awayScore
+
+            } = req.body;
 
 
-        if (
-            !eventId ||
-            !homeTeam ||
-            !awayTeam ||
-            homeScore === undefined ||
-            awayScore === undefined
-        ) {
+            /*
+            -------------------------------------------------
+            VALIDATION
+            -------------------------------------------------
+            */
 
-            return res.status(400).json({
+            if (
+
+                !eventId ||
+
+                !homeTeam ||
+
+                !awayTeam ||
+
+                homeScore === undefined ||
+
+                awayScore === undefined
+
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Missing match information."
+
+                });
+
+            }
+
+
+            const parsedHomeScore =
+                Number(homeScore);
+
+            const parsedAwayScore =
+                Number(awayScore);
+
+
+            if (
+
+                !Number.isFinite(
+                    parsedHomeScore
+                ) ||
+
+                !Number.isFinite(
+                    parsedAwayScore
+                ) ||
+
+                parsedHomeScore < 0 ||
+
+                parsedAwayScore < 0
+
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Invalid match score."
+
+                });
+
+            }
+
+
+            /*
+            -------------------------------------------------
+            SETTLE EVENT
+            -------------------------------------------------
+            */
+
+            const result =
+                await settleEvent({
+
+                    eventId,
+
+                    homeTeam,
+
+                    awayTeam,
+
+                    homeScore:
+                        parsedHomeScore,
+
+                    awayScore:
+                        parsedAwayScore
+
+                });
+
+
+            res.json(result);
+
+        } catch (error) {
+
+            console.error(
+                "Test settlement error:",
+                error
+            );
+
+            res.status(500).json({
+
                 success: false,
-                message: "Missing match information."
+
+                message:
+                    "Unable to settle event."
+
             });
 
         }
 
-
-        const result = await settleEvent({
-
-            eventId,
-
-            homeTeam,
-
-            awayTeam,
-
-            homeScore: Number(homeScore),
-
-            awayScore: Number(awayScore)
-
-        });
- 
-
-        res.json(result);
-
-
-    } catch (error) {
-
-        console.error(
-            "Test settlement error:",
-            error
-        );
-
-        res.status(500).json({
-            success: false,
-            message: "Unable to settle event."
-        });
-
     }
+);
 
-});
 
 module.exports = router;

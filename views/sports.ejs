@@ -1,0 +1,1862 @@
+<%- include("partials/head") %>
+
+<style>
+    /* =========================================================
+   SPORTS PAGE
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* =========================================================
+   UTILITY
+========================================================= */
+
+.hidden {
+    display: none !important;
+}
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+}
+
+button:disabled {
+    cursor: not-allowed;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.sports-container {
+    width: min(1400px, calc(100% - 40px));
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.sports-page {
+    padding: 45px 0 100px;
+    background: #f8fafc;
+    min-height: calc(100vh - 70px);
+}
+
+.sports-page-header {
+    margin-bottom: 28px;
+}
+
+.sports-label {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: #16a34a;
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.sports-page-header h1 {
+    margin-bottom: 10px;
+
+    color: #0f172a;
+
+    font-size: 38px;
+    line-height: 1.1;
+    font-weight: 800;
+
+    letter-spacing: -1px;
+}
+
+.sports-page-header p {
+    color: #64748b;
+
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   SPORT TABS
+========================================================= */
+
+.sport-tabs {
+    display: flex;
+    gap: 10px;
+
+    overflow-x: auto;
+
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+
+    scrollbar-width: none;
+}
+
+.sport-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.sport-tab {
+    flex: 0 0 auto;
+
+    padding: 12px 18px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #475569;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.sport-tab:hover:not(:disabled) {
+    border-color: #22c55e;
+    color: #15803d;
+    transform: translateY(-1px);
+}
+
+.sport-tab.active {
+    border-color: #16a34a;
+    background: #16a34a;
+    color: #ffffff;
+}
+
+.sport-tab.disabled,
+.sport-tab:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   LEAGUE TABS
+========================================================= */
+
+.league-tabs {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    overflow-x: auto;
+
+    margin-bottom: 28px;
+    padding: 5px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+
+    background: #f1f5f9;
+
+    scrollbar-width: none;
+}
+
+.league-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.league-tab {
+    flex: 0 0 auto;
+
+    padding: 10px 15px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: transparent;
+    color: #64748b;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.league-tab:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.league-tab.active {
+    background: #ffffff;
+    color: #0f172a;
+
+    box-shadow:
+        0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+
+ /* =========================================================
+   CONTENT LAYOUT
+========================================================= */
+
+.sports-layout {
+    display: block;
+
+    width: 100%;
+}
+
+.matches-section {
+    width: 100%;
+    min-width: 0;
+}
+
+
+/* =========================================================
+   MATCHES SECTION
+========================================================= */
+
+.matches-section {
+    min-width: 0;
+}
+
+.matches-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 16px;
+}
+
+.matches-small-title {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+.matches-header h2 {
+    margin-top: 5px;
+
+    color: #0f172a;
+
+    font-size: 23px;
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+}
+
+
+/* =========================================================
+   REFRESH BUTTON
+========================================================= */
+
+.refresh-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    padding: 9px 13px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #475569;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition:
+        border-color 0.2s ease,
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+.refresh-btn:hover {
+    border-color: #22c55e;
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+
+/* =========================================================
+   MATCH CARD
+========================================================= */
+
+.matches-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.match-card {
+    overflow: hidden;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.match-card:hover {
+    border-color: #cbd5e1;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.06);
+}
+
+
+/* =========================================================
+   MATCH HEADER
+========================================================= */
+
+.match-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 11px 16px;
+
+    border-bottom: 1px solid #f1f5f9;
+
+    background: #fafafa;
+}
+
+.match-card-header .match-league {
+    color: #64748b;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.match-date {
+    color: #94a3b8;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   TEAMS
+========================================================= */
+
+.match-teams {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        55px
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 20px 18px 18px;
+}
+
+.team {
+    min-width: 0;
+}
+
+.team:first-child {
+    text-align: right;
+}
+
+.team:last-child {
+    text-align: left;
+}
+
+.team-name {
+    display: block;
+
+    overflow: hidden;
+
+    color: #172033;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    line-height: 1.35;
+
+    text-overflow: ellipsis;
+}
+
+.match-vs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.match-vs span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    background: #f1f5f9;
+    color: #94a3b8;
+
+    font-size: 10px;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   ODDS AREA
+========================================================= */
+
+.match-odds {
+    padding: 0 16px 16px;
+}
+
+.odds-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.odds-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 8px;
+}
+
+
+/* =========================================================
+   ODDS BUTTON
+========================================================= */
+
+.odd-button {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-width: 0;
+
+    min-height: 44px;
+
+    padding: 10px 12px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+
+    background: #f8fafc;
+    color: #334155;
+
+    text-align: left;
+
+    transition:
+        border-color 0.18s ease,
+        background 0.18s ease,
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.odd-button:hover:not(:disabled) {
+    border-color: #22c55e;
+    background: #f0fdf4;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 3px 10px rgba(22, 163, 74, 0.08);
+}
+
+.odd-button span {
+    min-width: 0;
+
+    overflow: hidden;
+
+    color: #64748b;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.odd-button strong {
+    flex: 0 0 auto;
+
+    margin-left: 8px;
+
+    color: #0f172a;
+
+    font-size: 14px;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   SELECTED ODDS
+========================================================= */
+
+.odd-button.selected {
+    border-color: #16a34a;
+
+    background: #dcfce7;
+
+    box-shadow:
+        0 0 0 1px rgba(22, 163, 74, 0.10);
+}
+
+.odd-button.selected span {
+    color: #15803d;
+}
+
+.odd-button.selected strong {
+    color: #166534;
+}
+
+
+/* =========================================================
+   DISABLED / UNAVAILABLE ODDS
+========================================================= */
+
+.odd-button:disabled,
+.odd-button.unavailable {
+    cursor: not-allowed;
+
+    border-color: #e5e7eb;
+
+    background: #f8fafc;
+
+    color: #94a3b8;
+
+    opacity: 0.55;
+}
+
+.odd-button:disabled:hover,
+.odd-button.unavailable:hover {
+    border-color: #e5e7eb;
+
+    background: #f8fafc;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+/* =========================================================
+   MATCH FOOTER
+========================================================= */
+
+.match-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 10px 16px;
+
+    border-top: 1px solid #f1f5f9;
+
+    background: #fafafa;
+}
+
+.more-markets-btn {
+    border: none;
+
+    background: transparent;
+    color: #16a34a;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.more-markets-btn:hover {
+    color: #15803d;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.matches-loading {
+    padding: 75px 20px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 35px;
+    height: 35px;
+
+    margin: 0 auto 14px;
+
+    border: 3px solid #e2e8f0;
+    border-top-color: #16a34a;
+
+    border-radius: 50%;
+
+    animation:
+        sportsSpin 0.8s linear infinite;
+}
+
+.matches-loading p {
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+@keyframes sportsSpin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/* =========================================================
+   ERROR / EMPTY
+========================================================= */
+
+.matches-error,
+.matches-empty {
+    padding: 65px 25px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    text-align: center;
+}
+
+.error-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 50px;
+    height: 50px;
+
+    margin: 0 auto 13px;
+
+    border-radius: 50%;
+
+    background: #fef2f2;
+    color: #dc2626;
+
+    font-size: 22px;
+}
+
+.matches-empty > div:first-child {
+    margin-bottom: 12px;
+
+    font-size: 32px;
+}
+
+.matches-error h3,
+.matches-empty h3 {
+    margin-bottom: 7px;
+
+    color: #0f172a;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.matches-error p,
+.matches-empty p {
+    max-width: 430px;
+
+    margin: 0 auto;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+.matches-error button {
+    margin-top: 18px;
+
+    padding: 10px 16px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #16a34a;
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.matches-error button:hover {
+    background: #15803d;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   SHARED BET SLIP SUPPORT
+========================================================= */
+
+/*
+   The bet slip is now outside .sports-layout.
+   These styles allow the drawer to work globally.
+*/
+
+.bet-slip-backdrop {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9998;
+
+    background: rgba(15, 23, 42, 0.45);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+.bet-slip-backdrop.is-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* =========================================================
+   BET SLIP TOGGLE
+========================================================= */
+
+.bet-slip-toggle {
+    position: fixed;
+
+    right: 22px;
+    bottom: 22px;
+
+    z-index: 9997;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 12px 16px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #16a34a;
+    color: #ffffff;
+
+    box-shadow:
+        0 8px 25px rgba(22, 163, 74, 0.25);
+
+    font-size: 13px;
+    font-weight: 800;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.bet-slip-toggle:hover {
+    background: #15803d;
+
+    transform: translateY(-2px);
+}
+
+.bet-slip-toggle.hidden {
+    display: none;
+}
+
+.bet-slip-toggle-icon {
+    font-size: 15px;
+}
+
+.bet-slip-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 21px;
+    height: 21px;
+
+    padding: 0 5px;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+    color: #16a34a;
+
+    font-size: 10px;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   BET SLIP DRAWER
+========================================================= */
+
+.bet-slip {
+    position: fixed;
+
+    top: 0;
+    right: 0;
+
+    z-index: 9999;
+
+    display: flex;
+    flex-direction: column;
+
+    width: min(400px, 100vw);
+    height: 100vh;
+
+    background: #ffffff;
+
+    box-shadow:
+        -12px 0 35px rgba(15, 23, 42, 0.12);
+
+    transform: translateX(100%);
+
+    transition:
+        transform 0.28s ease;
+}
+
+.bet-slip.is-open {
+    transform: translateX(0);
+}
+
+
+/* =========================================================
+   BET SLIP HEADER
+========================================================= */
+
+.bet-slip-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 18px;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.bet-slip-heading {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+.bet-slip-heading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 9px;
+
+    background: #dcfce7;
+
+    font-size: 17px;
+}
+
+.bet-slip-heading-text h3 {
+    color: #0f172a;
+
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.bet-slip-heading-text span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.bet-slip-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.clear-bets {
+    border: none;
+
+    background: transparent;
+    color: #64748b;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.clear-bets:hover {
+    color: #dc2626;
+}
+
+.close-bet-slip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #f1f5f9;
+    color: #475569;
+
+    font-size: 21px;
+    line-height: 1;
+}
+
+.close-bet-slip:hover {
+    background: #e2e8f0;
+}
+
+
+/* =========================================================
+   BET TABS
+========================================================= */
+
+.bet-slip-tabs {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    padding: 5px;
+
+    margin: 12px 15px 0;
+
+    border-radius: 9px;
+
+    background: #f1f5f9;
+}
+
+.bet-tab {
+    padding: 9px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: transparent;
+    color: #64748b;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.bet-tab.active {
+    background: #ffffff;
+    color: #0f172a;
+
+    box-shadow:
+        0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+
+/* =========================================================
+   BET SLIP CONTENT
+========================================================= */
+
+.bet-slip-content {
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 15px;
+}
+
+
+/* =========================================================
+   EMPTY BET SLIP
+========================================================= */
+
+.empty-bet-slip {
+    padding: 65px 20px;
+
+    text-align: center;
+}
+
+.empty-bet-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 15px;
+
+    border-radius: 50%;
+
+    background: #f1f5f9;
+
+    font-size: 25px;
+}
+
+.empty-bet-slip h4 {
+    margin-bottom: 6px;
+
+    color: #0f172a;
+
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.empty-bet-slip p {
+    color: #94a3b8;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   BET SELECTION
+========================================================= */
+
+.bet-selections {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+.bet-selection {
+    padding: 13px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+
+    background: #ffffff;
+}
+
+.bet-selection-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 8px;
+}
+
+.bet-selection-teams {
+    color: #334155;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    line-height: 1.4;
+}
+
+.remove-selection {
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 23px;
+    height: 23px;
+
+    border: none;
+    border-radius: 6px;
+
+    background: #f8fafc;
+    color: #94a3b8;
+
+    font-size: 17px;
+    line-height: 1;
+}
+
+.remove-selection:hover {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.bet-selection-market {
+    margin-bottom: 5px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.bet-selection-choice {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    margin-bottom: 7px;
+}
+
+.bet-selection-choice strong {
+    color: #16a34a;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.bet-selection-choice span {
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+.bet-selection-odd {
+    display: inline-flex;
+
+    padding: 5px 7px;
+
+    border-radius: 6px;
+
+    background: #f0fdf4;
+    color: #15803d;
+
+    font-size: 10px;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   BET SLIP FOOTER
+========================================================= */
+
+.bet-slip-footer {
+    padding: 15px 16px 18px;
+
+    border-top: 1px solid #e2e8f0;
+
+    background: #ffffff;
+}
+
+.stake-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 12px;
+}
+
+.stake-row > span {
+    color: #475569;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.stake-input-wrapper {
+    display: flex;
+    align-items: center;
+
+    width: 150px;
+
+    padding: 0 11px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.stake-input-wrapper:focus-within {
+    border-color: #22c55e;
+    background: #ffffff;
+}
+
+.stake-input-wrapper > span {
+    color: #64748b;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+#stake-input {
+    width: 100%;
+
+    padding: 10px 7px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #0f172a;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+#stake-input::-webkit-inner-spin-button,
+#stake-input::-webkit-outer-spin-button {
+    margin: 0;
+
+    -webkit-appearance: none;
+}
+
+/* #stake-input {
+    -moz-appearance: textfield;
+} */
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+.summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 5px 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+.summary-row strong {
+    color: #0f172a;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.summary-row.potential-row {
+    padding-top: 8px;
+}
+
+.summary-row.potential-row strong {
+    color: #16a34a;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   PLACE BET
+========================================================= */
+
+.place-bet-btn {
+    width: 100%;
+
+    margin-top: 13px;
+
+    padding: 13px 16px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #16a34a;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 900;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.place-bet-btn:hover:not(:disabled) {
+    background: #15803d;
+
+    transform: translateY(-1px);
+}
+
+.place-bet-btn:disabled {
+    opacity: 0.65;
+}
+
+
+/* =========================================================
+   RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 1000px) {
+
+    .sports-layout {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .sports-container {
+        width: min(
+            100% - 24px,
+            1400px
+        );
+    }
+
+
+    .sports-page {
+        padding-top: 30px;
+        padding-bottom: 80px;
+    }
+
+
+    .sports-page-header h1 {
+        font-size: 30px;
+    }
+
+
+    .sports-page-header p {
+        font-size: 14px;
+    }
+
+
+    .matches-header {
+        align-items: center;
+    }
+
+
+    .matches-header h2 {
+        font-size: 20px;
+    }
+
+
+    .refresh-btn {
+        padding: 8px 10px;
+
+        font-size: 12px;
+    }
+
+
+    .match-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+
+    .match-date {
+        font-size: 10px;
+    }
+
+
+    .match-teams {
+        grid-template-columns:
+            minmax(0, 1fr)
+            42px
+            minmax(0, 1fr);
+
+        padding: 17px 13px 15px;
+    }
+
+
+    .team-name {
+        font-size: 13px;
+    }
+
+
+    .match-vs span {
+        width: 32px;
+        height: 32px;
+
+        font-size: 9px;
+    }
+
+
+    .match-odds {
+        padding: 0 10px 12px;
+    }
+
+
+    .odds-grid {
+        gap: 6px;
+    }
+
+
+    .odd-button {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        gap: 4px;
+
+        padding: 10px 5px;
+
+        text-align: center;
+    }
+
+
+    .odd-button span {
+        max-width: 100%;
+
+        font-size: 9px;
+    }
+
+
+    .odd-button strong {
+        margin-left: 0;
+
+        font-size: 13px;
+    }
+
+
+    .bet-slip {
+        width: 100%;
+    }
+
+
+    .bet-slip-toggle {
+        right: 15px;
+        bottom: 15px;
+
+        padding: 11px 14px;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    .sports-container {
+        width: calc(100% - 18px);
+    }
+
+
+    .sport-tab {
+        padding: 10px 14px;
+
+        font-size: 12px;
+    }
+
+
+    .league-tabs {
+        margin-bottom: 20px;
+    }
+
+
+    .league-tab {
+        padding: 9px 12px;
+
+        font-size: 12px;
+    }
+
+
+    .matches-header {
+        gap: 10px;
+    }
+
+
+    .refresh-btn {
+        font-size: 0;
+    }
+
+
+    .refresh-btn::before {
+        content: "↻";
+
+        font-size: 18px;
+    }
+
+
+    .match-teams {
+        grid-template-columns:
+            minmax(0, 1fr)
+            35px
+            minmax(0, 1fr);
+    }
+
+
+    .team-name {
+        font-size: 12px;
+    }
+
+}
+</style>
+    
+<%- include("partials/navbar") %>
+
+<!-- =========================================================
+     REAL SPORTS PAGE
+========================================================= -->
+
+<main class="sports-page">
+
+    <div class="sports-container">
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <div class="sports-page-header">
+
+            <div>
+
+                <span class="sports-label">
+                    REAL SPORTS
+                </span>
+
+                <h1>
+                    Sports Betting
+                </h1>
+
+                <p>
+                    Bet on today's biggest football matches
+                    and competitions.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SPORT TABS
+        ================================================== -->
+
+        <div class="sport-tabs">
+
+            <button
+                type="button"
+                class="sport-tab active"
+                data-sport="football"
+            >
+                ⚽ Football
+            </button>
+
+            <button
+                type="button"
+                class="sport-tab disabled"
+                disabled
+            >
+                🏀 Basketball
+            </button>
+
+            <button
+                type="button"
+                class="sport-tab disabled"
+                disabled
+            >
+                🎾 Tennis
+            </button>
+
+            <button
+                type="button"
+                class="sport-tab disabled"
+                disabled
+            >
+                🏎️ Racing
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             FOOTBALL LEAGUES
+        ================================================== -->
+
+        <div class="league-tabs">
+
+            <button
+                type="button"
+                class="league-tab active"
+                data-league="epl"
+            >
+                Premier League
+            </button>
+
+            <button
+                type="button"
+                class="league-tab"
+                data-league="laliga"
+            >
+                La Liga
+            </button>
+
+            <button
+                type="button"
+                class="league-tab"
+                data-league="bundesliga"
+            >
+                Bundesliga
+            </button>
+
+            <button
+                type="button"
+                class="league-tab"
+                data-league="seriea"
+            >
+                Serie A
+            </button>
+
+            <button
+                type="button"
+                class="league-tab"
+                data-league="ligue1"
+            >
+                Ligue 1
+            </button>
+
+            <button
+                type="button"
+                class="league-tab"
+                data-league="champions"
+            >
+                Champions League
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <div class="sports-layout">
+
+            <!-- =============================================
+                 MATCHES
+            ============================================== -->
+
+            <section class="matches-section">
+
+                <!-- MATCH HEADER -->
+
+                <div class="matches-header">
+
+                    <div>
+
+                        <span class="matches-small-title">
+                            FOOTBALL
+                        </span>
+
+                        <h2 id="leagueTitle">
+                            Premier League
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="refreshMatches"
+                        class="refresh-btn"
+                    >
+                        ↻ Refresh
+                    </button>
+
+                </div>
+
+
+                <!-- =========================================
+                     LOADING
+                ========================================== -->
+
+                <div
+                    id="matchesLoading"
+                    class="matches-loading"
+                >
+
+                    <div class="loading-spinner"></div>
+
+                    <p>
+                        Loading matches...
+                    </p>
+
+                </div>
+
+
+                <!-- =========================================
+                     ERROR
+                ========================================== -->
+
+                <div
+                    id="matchesError"
+                    class="matches-error hidden"
+                >
+
+                    <div class="error-icon">
+                        ⚠
+                    </div>
+
+                    <h3>
+                        Unable to load matches
+                    </h3>
+
+                    <p id="matchesErrorMessage">
+                        Please try again.
+                    </p>
+
+                    <button
+                        type="button"
+                        id="retryMatches"
+                    >
+                        Try Again
+                    </button>
+
+                </div>
+
+
+                <!-- =========================================
+                     EMPTY
+                ========================================== -->
+
+                <div
+                    id="matchesEmpty"
+                    class="matches-empty hidden"
+                >
+
+                    <div>
+                        ⚽
+                    </div>
+
+                    <h3>
+                        No upcoming matches
+                    </h3>
+
+                    <p>
+                        There are currently no upcoming
+                        matches in this competition.
+                    </p>
+
+                </div>
+
+
+                <!-- =========================================
+                     MATCH LIST
+                ========================================== -->
+
+                <div
+                    id="matchesList"
+                    class="matches-list"
+                ></div>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- =========================================================
+     SHARED BET SLIP
+
+     IMPORTANT:
+     This is the same bet slip used by:
+     /sports
+     /virtual
+     homepage
+========================================================= -->
+
+<%- include("partials/bet-slip") %>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<%- include("partials/footer") %>
+
+<script src="/js/bet-slip.js"></script>
+<script src="/js/sports.js"></script>

@@ -3,6 +3,12 @@ const Transaction = require("../models/Transaction");
 const crypto = require("crypto");
 
 
+/*
+=========================================================
+GENERATE TRANSACTION REFERENCE
+=========================================================
+*/
+
 function generateReference(prefix = "TXN") {
 
     return `${prefix}_${Date.now()}_${crypto
@@ -14,7 +20,19 @@ function generateReference(prefix = "TXN") {
 
 
 /*
-    CREDIT USER
+=========================================================
+CREDIT USER
+=========================================================
+
+Used for:
+
+- Bet winnings
+- Deposits
+- Admin credits
+- Refunds
+
+The balance update is performed atomically so two
+simultaneous requests cannot overwrite each other.
 */
 
 async function creditUser({
@@ -28,37 +46,112 @@ async function creditUser({
         throw new Error("Invalid credit amount.");
     }
 
-    const user = await User.findById(userId);
+
+    /*
+    -----------------------------------------------------
+    ATOMIC BALANCE UPDATE
+    -----------------------------------------------------
+    */
+
+    const user = await User.findOneAndUpdate(
+
+        {
+            _id: userId
+        },
+
+        {
+            $inc: {
+                balance: amount
+            }
+        },
+
+        {
+            new: true
+        }
+
+    );
+
 
     if (!user) {
         throw new Error("User not found.");
     }
 
-    const balanceBefore = user.balance;
 
-    user.balance += amount;
+    /*
+    -----------------------------------------------------
+    CALCULATE BALANCE BEFORE
+    -----------------------------------------------------
 
-    await user.save();
+    Since the update has already happened:
 
-    const transaction = await Transaction.create({
+        balanceBefore =
+        balanceAfter - amount
+    */
 
-        user: user._id,
+    const balanceAfter = user.balance;
 
-        type,
+    const balanceBefore =
+        balanceAfter - amount;
 
-        amount,
 
-        balanceBefore,
+    /*
+    -----------------------------------------------------
+    CREATE TRANSACTION
+    -----------------------------------------------------
+    */
 
-        balanceAfter: user.balance,
+    let transaction;
 
-        status: "completed",
+    try {
 
-        description,
+        transaction = await Transaction.create({
 
-        reference: generateReference("CREDIT")
+            user: user._id,
 
-    });
+            type,
+
+            amount,
+
+            balanceBefore,
+
+            balanceAfter,
+
+            status: "completed",
+
+            description,
+
+            reference: generateReference("CREDIT")
+
+        });
+
+    } catch (error) {
+
+        /*
+        IMPORTANT:
+
+        If transaction creation fails, reverse the
+        balance change so we don't have money movement
+        without a transaction record.
+        */
+
+        await User.updateOne(
+
+            {
+                _id: user._id
+            },
+
+            {
+                $inc: {
+                    balance: -amount
+                }
+            }
+
+        );
+
+        throw error;
+
+    }
+
 
     return {
         user,
@@ -69,7 +162,18 @@ async function creditUser({
 
 
 /*
-    DEBIT USER
+=========================================================
+DEBIT USER
+=========================================================
+
+Used for:
+
+- Bet stake
+- Withdrawal
+- Admin debit
+
+The balance check and deduction happen in ONE atomic
+MongoDB operation.
 */
 
 async function debitUser({
@@ -83,41 +187,143 @@ async function debitUser({
         throw new Error("Invalid debit amount.");
     }
 
-    const user = await User.findById(userId);
+
+    /*
+    -----------------------------------------------------
+    ATOMIC BALANCE CHECK + DEDUCTION
+    -----------------------------------------------------
+
+    This is very important.
+
+    Instead of:
+
+        read balance
+        check balance
+        subtract
+        save
+
+    MongoDB performs:
+
+        balance >= amount
+        AND
+        balance -= amount
+
+    as one operation.
+    */
+
+    const user = await User.findOneAndUpdate(
+
+        {
+            _id: userId,
+
+            balance: {
+                $gte: amount
+            }
+
+        },
+
+        {
+            $inc: {
+                balance: -amount
+            }
+        },
+
+        {
+            new: true
+        }
+
+    );
+
+
+    /*
+    -----------------------------------------------------
+    DETERMINE WHY THE UPDATE FAILED
+    -----------------------------------------------------
+    */
 
     if (!user) {
-        throw new Error("User not found.");
-    }
 
-    if (user.balance < amount) {
+        const existingUser =
+            await User.findById(userId);
+
+        if (!existingUser) {
+            throw new Error("User not found.");
+        }
+
         throw new Error("Insufficient balance.");
+
     }
 
-    const balanceBefore = user.balance;
 
-    user.balance -= amount;
+    /*
+    -----------------------------------------------------
+    CALCULATE BALANCE BEFORE
+    -----------------------------------------------------
+    */
 
-    await user.save();
+    const balanceAfter = user.balance;
 
-    const transaction = await Transaction.create({
+    const balanceBefore =
+        balanceAfter + amount;
 
-        user: user._id,
 
-        type,
+    /*
+    -----------------------------------------------------
+    CREATE TRANSACTION
+    -----------------------------------------------------
+    */
 
-        amount,
+    let transaction;
 
-        balanceBefore,
+    try {
 
-        balanceAfter: user.balance,
+        transaction = await Transaction.create({
 
-        status: "completed",
+            user: user._id,
 
-        description,
+            type,
 
-        reference: generateReference("DEBIT")
+            amount,
 
-    });
+            balanceBefore,
+
+            balanceAfter,
+
+            status: "completed",
+
+            description,
+
+            reference: generateReference("DEBIT")
+
+        });
+
+    } catch (error) {
+
+        /*
+        IMPORTANT:
+
+        If transaction creation fails, restore the
+        deducted balance.
+        */
+
+        await User.updateOne(
+
+            {
+                _id: user._id
+            },
+
+            {
+                $inc: {
+                    balance: amount
+                }
+            }
+
+        );
+
+        throw error;
+
+    }
+
 
     return {
         user,
@@ -126,6 +332,12 @@ async function debitUser({
 
 }
 
+
+/*
+=========================================================
+EXPORT
+=========================================================
+*/
 
 module.exports = {
     creditUser,

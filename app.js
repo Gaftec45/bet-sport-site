@@ -68,11 +68,36 @@ mongoose
     console.error("MongoDB error:", error.message);
   });
 
+
+
+const { runSettlementWorker } = require("./services/settlementWorker");
+
+
+/*
+    Run immediately when server starts,
+    then every 60 seconds.
+*/
+
+runSettlementWorker();
+
+
+setInterval(
+    () => {
+
+        runSettlementWorker();
+
+    },
+    60 * 1000
+);
+
+
+
 // Routes
 app.use("/", require("./routes/index"));
 app.use("/", require("./routes/auth"));
 app.use("/", require("./routes/dashboard"));
 app.use("/", require("./routes/odds"));
+app.use("/", require("./routes/virtualSports"));
 app.use("/", require("./routes/bets"));
 app.use("/", require("./routes/admin"));
 

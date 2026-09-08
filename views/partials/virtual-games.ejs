@@ -5,37 +5,34 @@
         <div class="section-header">
 
             <div>
+
                 <span class="section-label">
                     VIRTUAL SPORTS
                 </span>
 
                 <h2>Play virtual games</h2>
+
             </div>
 
-            <a href="#">
+            <a href="/virtual">
                 View all →
             </a>
 
         </div>
 
-        <div class="virtual-grid">
 
-            <div class="virtual-card">
-                <span>⚽</span>
-                <h3>Virtual Football</h3>
-                <p>Next race in 30 seconds</p>
-            </div>
+        <div class="virtual-grid" id="virtualGamesGrid">
 
-            <div class="virtual-card">
-                <span>🏇</span>
-                <h3>Virtual Horse Racing</h3>
-                <p>Next race in 45 seconds</p>
-            </div>
+            <!-- Loading state -->
 
-            <div class="virtual-card">
-                <span>🏎️</span>
-                <h3>Virtual Racing</h3>
-                <p>Next race in 20 seconds</p>
+            <div class="virtual-card virtual-loading">
+
+                <span>🎮</span>
+
+                <h3>Loading virtual games...</h3>
+
+                <p>Please wait</p>
+
             </div>
 
         </div>
@@ -43,3 +40,213 @@
     </div>
 
 </section>
+
+
+<script>
+
+async function loadVirtualGames() {
+
+    const grid =
+        document.getElementById("virtualGamesGrid");
+
+
+    try {
+
+        const response =
+            await fetch("/api/virtual/game-types");
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                "Unable to load virtual games"
+            );
+
+        }
+
+
+        /*
+            SportLogic game types
+        */
+
+        const games =
+            result.data || result.gameTypes || [];
+
+
+        if (!games.length) {
+
+            grid.innerHTML = `
+
+                <div class="virtual-card">
+
+                    <span>🎮</span>
+
+                    <h3>No virtual games</h3>
+
+                    <p>
+                        Virtual games are currently unavailable.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /*
+            Icons based on game type
+        */
+
+        function getGameIcon(name) {
+
+            const value =
+                String(name || "").toLowerCase();
+
+
+            if (
+                value.includes("horse") ||
+                value.includes("derby") ||
+                value.includes("steeple")
+            ) {
+                return "🏇";
+            }
+
+
+            if (
+                value.includes("hound") ||
+                value.includes("greyhound")
+            ) {
+                return "🐕";
+            }
+
+
+            if (
+                value.includes("motor") ||
+                value.includes("racing") ||
+                value.includes("seater")
+            ) {
+                return "🏎️";
+            }
+
+
+            if (
+                value.includes("skating")
+            ) {
+                return "⛸️";
+            }
+
+
+            if (
+                value.includes("football") ||
+                value.includes("soccer")
+            ) {
+                return "⚽";
+            }
+
+
+            return "🎮";
+
+        }
+
+
+        /*
+            Render cards
+        */
+
+        grid.innerHTML =
+            games.map(game => {
+
+                const gameId =
+                    game.id;
+
+
+                const gameName =
+                    game.name ||
+                    game.title ||
+                    game.game_type ||
+                    "Virtual Game";
+
+
+                const description =
+                    game.description ||
+                    "Play virtual sports";
+
+
+                const icon =
+                    getGameIcon(gameName);
+
+
+                return `
+
+                    <a
+                        href="/virtual?gameTypeId=${encodeURIComponent(gameId)}"
+                        class="virtual-card"
+                    >
+
+                        <span>
+                            ${icon}
+                        </span>
+
+                        <h3>
+                            ${gameName}
+                        </h3>
+
+                        <p>
+                            ${description}
+                        </p>
+
+                    </a>
+
+                `;
+
+            }).join("");
+
+
+    } catch (error) {
+
+        console.error(
+            "Virtual games loading error:",
+            error
+        );
+
+
+        grid.innerHTML = `
+
+            <div class="virtual-card">
+
+                <span>⚠️</span>
+
+                <h3>Unable to load games</h3>
+
+                <p>
+                    Please try again later.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/*
+    Load virtual games
+*/
+
+loadVirtualGames();
+
+</script>
+
