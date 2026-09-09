@@ -6,31 +6,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 async function loadFootballOdds() {
-
     const liveContainer = document.getElementById("live-games-list");
     const upcomingContainer = document.getElementById("upcoming-games-list");
 
-    try {
+    console.log("🏈 Loading football odds...");
 
-        const response = await fetch("/api/odds/football");
+    try {
+        const response = await fetch("/api/football/odds");
+
+        console.log("Football API status:", response.status);
 
         if (!response.ok) {
-            throw new Error("Failed to fetch football odds");
+            throw new Error(`API request failed: ${response.status}`);
         }
 
         const result = await response.json();
+
+        console.log("Football API response:", result);
 
         if (!result.success) {
             throw new Error(result.message || "Unable to load odds");
         }
 
-        const games = result.data || [];
+        const games = Array.isArray(result.data)
+            ? result.data
+            : [];
 
-        renderGames(games, liveContainer, upcomingContainer);
+        console.log("Football games received:", games.length);
+        console.log("Games:", games);
+
+        if (games.length === 0) {
+            if (upcomingContainer) {
+                upcomingContainer.innerHTML = `
+                    <div class="game-card">
+                        <div class="game-info">
+                            <span>No upcoming games available.</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (liveContainer) {
+                liveContainer.innerHTML = `
+                    <div class="game-card">
+                        <div class="game-info">
+                            <span>No live games available.</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return;
+        }
+
+        renderGames(
+            games,
+            liveContainer,
+            upcomingContainer
+        );
 
     } catch (error) {
-
-        console.error("Odds loading error:", error);
+        console.error("❌ Odds loading error:", error);
 
         if (liveContainer) {
             liveContainer.innerHTML = `
@@ -53,7 +89,6 @@ async function loadFootballOdds() {
         }
     }
 }
-
 
 function renderGames(games, liveContainer, upcomingContainer) {
 
